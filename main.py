@@ -47,6 +47,7 @@ class Payload1(object):
 
 
 class Payload2(object):
+    '''针对4.0版本'''
     a = "hello -> a"
     payloads1 = ["Xor True","Xor False","%26%26 true","%26%26 false"]
     payloads2 = "/**//*!order*//**/by/**/{}"
@@ -68,12 +69,13 @@ class Payload2(object):
 
 
 class RePLace(Payload1,Payload2):
-
+    '''针对4.0 payload替换.'''
     payloads = list
 
     def __init__(self):
-        print(self.b)
-        print(self.a)
+        # print(self.b)
+        # print(self.a)
+        pass
 
     def payload(self):
         pass
@@ -86,27 +88,33 @@ class RePLace(Payload1,Payload2):
 
 
 class Blind_injection(RePLace):
-    '''盲注'''
+    '''针对4.0盲注'''
     def ZRDCS(self):
         # %26 -> &
         pass
 
     def PDSJKCD(self):
+        '''判断数据库长度'''
         pass
 
     def HQSJKM(self):
+        '''获取数据库名'''
         pass
 
     def PDLBCD(self):
+        '''判断列表长度'''
         pass
 
     def HQLBM(self):
+        '''获取列表名'''
         pass
 
     def PDZDCD(self):
+        '''判断字段长度'''
         pass
 
     def HQZDNR(self):
+        '''获取字段内容'''
         pass
     
 class Ordinary_injection(RePLace):
@@ -140,6 +148,9 @@ class Ordinary_injection(RePLace):
         pass
 
 
+def TK(self):
+    '''脱库'''
+    pass
 
 def headers():
     pass
