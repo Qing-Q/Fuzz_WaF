@@ -90,6 +90,7 @@ class RePLace(Payload1,Payload2):
 class Blind_injection(RePLace):
     '''针对4.0盲注'''
     def ZRDCS(self):
+        '''注入点测试'''
         # %26 -> &
         pass
 
