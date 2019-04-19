@@ -77,7 +77,6 @@ class Payload2(object):
 
 # class Payload3(object):
 #     c = "hello -> c"
-# test1.pys
 
 class RePLace(Payload1,Payload2):
     '''针对4.0 payload替换.'''
