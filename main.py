@@ -73,7 +73,6 @@ class Payload2(object):
 # p = s.payloads3
 # pp = p.format("",4)
 # print(pp)
-# print(pp)
 
 
 # class Payload3(object):
