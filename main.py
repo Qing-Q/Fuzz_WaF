@@ -22,8 +22,10 @@ logo = """
 logo = '\033[1;33m' +'{}'.format(logo)+ '\033[0m'
 
 
+# import urllib
 import random
-import urllib
+import re
+import requests
 
 
 class Payload1(object):
@@ -174,4 +176,87 @@ def WAF_Inspect():
 # print('\033[1;33m' + '******************************' + '\033[0m')
 # print(logo)
 
+
+def req(url):
+    # url = "http://192.168.2.118/t2.html"
+    # url = "https://www.so.com"
+    headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
+    r = requests.get(url,headers=headers)
+    r = r.content.decode('utf-8')
+    r = r.split('>')
+    return r
+
+def Find_name(url):
+    r = req(url)
+    pattern = re.compile(r'<input.*')
+    #查找属性name值.
+    for r in r:
+        result1 = pattern.findall(r)
+        # print(result1)
+        for v in result1:
+            s1 = v.split(' ')
+            for s1 in s1:
+                if 'name' in s1:
+                    s1 = s1.split('=')
+                    s1 = s1[1].split('"')
+                    for s1 in s1:
+                        if s1:
+                            s1 = s1
+                            yield s1
+
+
+def Find_method(url):
+    r = req(url)
+    pattern = re.compile(r'<form.*')
+    #查找属性method值.
+    for r in r:
+        result1 = pattern.findall(r)
+        for v in result1:
+            s1 = v.split(' ')
+            for s1 in s1:
+                if 'method' in s1:
+                    s1 = s1.split('=')
+                    s1 = s1[1].split('"')
+                    for s1 in s1:
+                        if s1:
+                            if 'post' in s1:
+                                return 'post'
+                            elif 'get' in s1:
+                                return 'get'
+                            elif 'POST' in s1:
+                                return 'POST'
+                            elif 'GET' in s1:
+                                return 'GET'
+                            else:
+                                return None
+
+# /?/
+def Find_reqajax_method(url):
+    headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
+    r = requests.get(url,headers=headers)
+    r = r.content.decode('utf-8')
+
+    pattern = re.compile(r'<script.*')
+    for r in r:
+        result1 = pattern.findall(r)
+        for r in result1:
+            #Matching Multiple {
+            pattern1 = re.compile(r'\$\.ajax*')
+            result1 = pattern.findall(r)
+            print(result1)
+
+        # pattern2 = re.compile(r'\$\.ajax\((\{{})')
+
+
+def Judgement_encode():
+    """Judgement html doc encode."""
+    pass
+
+
+# def req_():
+#     f = Find_method("https://primarymaths.ephhk.com/pages/contain.php")
+#     if 'POST' in f or 'post' in f or 'GET' in f or 'get' in f:
+#         pass
+
+Find_reqajax_method("https://primarymaths.ephhk.com/pages/contain.php")
 
