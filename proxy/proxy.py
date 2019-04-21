@@ -633,6 +633,9 @@ class Proxy(threading.Thread):
 
     @staticmethod
     def _get_response_pkt_by_exception(e):
+        """通过异常获取响应"""
+
+        #如果响应结果是ProxyAuthenticationFailed/?/
         if e.__class__.__name__ == 'ProxyAuthenticationFailed':
             return PROXY_AUTHENTICATION_REQUIRED_RESPONSE_PKT
         if e.__class__.__name__ == 'ProxyConnectionFailed':
