@@ -210,9 +210,15 @@ class HttpParser(object):
             self.headers[b'transfer-encoding'][1].lower() == b'chunked'
 
     def parse(self, data):
+        # 解析HTTP请求
+        print('-------------------------------------------------------')
         self.raw += data
+        print('self.raw -> ',self.raw)
         data = self.buffer + data
+        print('data -> ',data)
         self.buffer = b''
+        print('self.buffer -> ',self.buffer)
+        print('-------------------------------------------------------')
 
         more = True if len(data) > 0 else False
         while more:
@@ -475,12 +481,15 @@ class Proxy(threading.Thread):
 
     @staticmethod
     def _now():
+        #获取现在的时间./?/
         return datetime.datetime.utcnow()
 
     def _inactive_for(self):
+        #获取当前任务执行的时间./?/
         return (self._now() - self.last_activity).seconds
 
     def _is_inactive(self):
+        #返回大于30秒的任务时间/?/
         return self._inactive_for() > 30
 
     def _process_request(self, data):
