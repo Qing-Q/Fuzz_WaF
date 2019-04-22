@@ -27,7 +27,35 @@ import random
 import re
 import requests
 import dis
+import argparse
 from lxml import etree
+
+
+
+
+
+
+
+
+
+
+
+
+
+def mian():
+    parser = argparse.ArgumentParser(description="Bypassing Security Dog.")
+    parser.add_argument('--version','-v',action='store_true',help='Cat version.')
+    parser.add_argument('--encodes','-e',help='HTML Doc Coding method.[-e utf-8]')
+    args = parser.parse_args()
+    return args
+
+
+
+
+def Judgement_encode():
+    args = mian()
+    return args.encodes
+
 
 
 class Payload1(object):
@@ -167,9 +195,6 @@ def TK(self):
     '''脱库'''
     pass
 
-def headers():
-    pass
-
 
 def WAF_Inspect():
     pass
@@ -179,18 +204,21 @@ def WAF_Inspect():
 # print(logo)
 
 class Find_Parameter(object):
+    
 
-    def req(self,url):
-        # url = "http://192.168.2.118/t2.html"
-        # url = "https://www.so.com"
-        headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
-        r = requests.get(url,headers=headers)
-        r = r.content.decode('utf-8')
+    def __init__(self,url):
+        self.url = url
+
+    def req(self):
+        headers = get_headers()
+        r = requests.get(self.url,headers=headers)
+        encodes = Judgement_encode()
+        r = r.content.decode(encodes)
         r = r.split('>')
         return r
 
-    def Find_name(self,url):
-        r = self.req(url)
+    def Find_name(self):
+        r = self.req()
         pattern = re.compile(r'<input.*')
         #查找属性name值.
         for r in r:
@@ -208,8 +236,8 @@ class Find_Parameter(object):
                                 yield s1
 
 
-    def Find_method(self,url):
-        r = self.req(url)
+    def Find_method(self):
+        r = self.req()
         pattern = re.compile(r'<form.*')
         #查找属性method值.
         for r in r:
@@ -234,16 +262,16 @@ class Find_Parameter(object):
                                     return 'GET'
                         
 
-    # /?/
-    def Find_reqajax_parameter(self,url):
+    #
+    def Find_reqajax_parameter(self):
         self.kt_j = []
         self.zj_j = []
         self.zj_z = []
         self.jw_z = []
-        headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
-        headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/65.0"}
-        r = requests.get(url,headers=headers)
-        r = r.content.decode('utf-8')
+        headers = get_headers()
+        r = requests.get(self.url,headers=headers)
+        encodes = Judgement_encode()
+        r = r.content.decode(encodes)
         html=etree.HTML(r,etree.HTMLParser())
         result=html.xpath('//script/text()')
         for v in result:
@@ -301,32 +329,27 @@ class Find_Parameter(object):
         # print(self.zj_j)
         # # print(jw_z)
                                             
-                                        
 
 
 
-                                
 
 
-                                
-                                    
-                                        
-
-                  
-                                
-                                
-                                
-
-
-
+    # def Judgement_encode(self):
+    #     """Judgement html doc encode."""
+    #     headers = get_headers()
+    #     r = requests.get(self.url,headers=headers)
+    #     r = r.text
+    #     pattern = re.compile(r'<meta.*')
+    #     result1 = pattern.findall(r)
+    #     for result1 in result1:
+    #         result1 = result1.split(' ')
+    #         for result1 in result1:
+    #             if 'charset' in result1:
+    #                 result1 = result1.split('=')
+    #                 result1 = result1[1].strip().strip('"')
+    #                 return result1
                 
-
-
-
-
-def Judgement_encode(url):
-    """Judgement html doc encode."""
-    pass
+    
 
 
 # def req_():
@@ -334,11 +357,110 @@ def Judgement_encode(url):
 #     if 'POST' in f or 'post' in f or 'GET' in f or 'get' in f:
 #         pass
 
-s = Find_Parameter()
-s1 = s.Find_reqajax_parameter("https://primarymaths.ephhk.com/pages/contain.php")
-s2 = s.Find_method("https://primarymaths.ephhk.com/pages/contain.php")
-# print(s1)
-# print(s2)
+
+
+
+
+
+useragents = [
+    {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.4; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2225.0 Safari/537.36'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10; rv:33.0) Gecko/20100101 Firefox/33.0'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/31.0'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (X11; OpenBSD amd64; rv:28.0) Gecko/20100101 Firefox/28.0'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/533.1 (KHTML, like Gecko) Maxthon/3.0.8.2 Safari/533.1'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A'
+    },
+    {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2'
+    }
+]
+
+
+def get_headers():
+    """return ramdomly chosen useragent"""
+
+    return random.choice(useragents)
+
+
+class test(Find_Parameter):
+
+    def __init__(self,url):
+        self.url = url
+
+    def test(self):
+        self.Find_reqajax_parameter()
+        print(self.kt_j)
+        print(self.zj_j)
+        print(self.jw_z)
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    args = mian()
+    if args.version:
+        print(logo)
+        print('v1.1')
+    
+    # s = Find_Parameter('https://primarymaths.ephhk.com/pages/contain.php')
+
+    # s2 = s.Find_method("https://primarymaths.ephhk.com/pages/contain.php")
+    # print(s1)
+    # s2 = s.Find_method("https://www.baidu.com")
+    # s2 = random.choice(s2)
+    # print(s2)
+    s = test('https://primarymaths.ephhk.com/pages/contain.php')
+    s.test()
+    
+  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
