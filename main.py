@@ -51,6 +51,7 @@ def mian():
     parser.add_argument('--version','-v',action='store_true',help='Cat version.')
     parser.add_argument('--data','-d',help="Post data.")
     parser.add_argument('--url','-u',help="Scan url.")
+    parser.add_argument('-multiple','-m',help="Batch Scanning.")
     args = parser.parse_args()
     return args
 
