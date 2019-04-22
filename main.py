@@ -26,6 +26,8 @@ logo = '\033[1;33m' +'{}'.format(logo)+ '\033[0m'
 import random
 import re
 import requests
+import dis
+from lxml import etree
 
 
 class Payload1(object):
@@ -176,79 +178,153 @@ def WAF_Inspect():
 # print('\033[1;33m' + '******************************' + '\033[0m')
 # print(logo)
 
+class Find_Parameter(object):
 
-def req(url):
-    # url = "http://192.168.2.118/t2.html"
-    # url = "https://www.so.com"
-    headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
-    r = requests.get(url,headers=headers)
-    r = r.content.decode('utf-8')
-    r = r.split('>')
-    return r
+    def req(self,url):
+        # url = "http://192.168.2.118/t2.html"
+        # url = "https://www.so.com"
+        headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
+        r = requests.get(url,headers=headers)
+        r = r.content.decode('utf-8')
+        r = r.split('>')
+        return r
 
-def Find_name(url):
-    r = req(url)
-    pattern = re.compile(r'<input.*')
-    #查找属性name值.
-    for r in r:
-        result1 = pattern.findall(r)
-        # print(result1)
-        for v in result1:
-            s1 = v.split(' ')
-            for s1 in s1:
-                if 'name' in s1:
-                    s1 = s1.split('=')
-                    s1 = s1[1].split('"')
-                    for s1 in s1:
-                        if s1:
-                            s1 = s1
-                            yield s1
-
-
-def Find_method(url):
-    r = req(url)
-    pattern = re.compile(r'<form.*')
-    #查找属性method值.
-    for r in r:
-        result1 = pattern.findall(r)
-        for v in result1:
-            s1 = v.split(' ')
-            for s1 in s1:
-                if 'method' in s1:
-                    s1 = s1.split('=')
-                    s1 = s1[1].split('"')
-                    for s1 in s1:
-                        if s1:
-                            if 'post' in s1:
-                                return 'post'
-                            elif 'get' in s1:
-                                return 'get'
-                            elif 'POST' in s1:
-                                return 'POST'
-                            elif 'GET' in s1:
-                                return 'GET'
-                            else:
-                                return None
-
-# /?/
-def Find_reqajax_method(url):
-    headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
-    r = requests.get(url,headers=headers)
-    r = r.content.decode('utf-8')
-
-    pattern = re.compile(r'<script.*')
-    for r in r:
-        result1 = pattern.findall(r)
-        for r in result1:
-            #Matching Multiple {
-            pattern1 = re.compile(r'\$\.ajax*')
+    def Find_name(self,url):
+        r = self.req(url)
+        pattern = re.compile(r'<input.*')
+        #查找属性name值.
+        for r in r:
             result1 = pattern.findall(r)
-            print(result1)
+            # print(result1)
+            for v in result1:
+                s1 = v.split(' ')
+                for s1 in s1:
+                    if 'name' in s1:
+                        s1 = s1.split('=')
+                        s1 = s1[1].split('"')
+                        for s1 in s1:
+                            if s1:
+                                s1 = s1
+                                yield s1
 
-        # pattern2 = re.compile(r'\$\.ajax\((\{{})')
+
+    def Find_method(self,url):
+        r = self.req(url)
+        pattern = re.compile(r'<form.*')
+        #查找属性method值.
+        for r in r:
+            if 'post' not in r and 'POST' not in r and 'get' not in r and 'GET' not in r:
+                return('POST','post')
+            result1 = pattern.findall(r)
+            for v in result1:
+                s1 = v.split(' ')
+                for s1 in s1:
+                    if 'method' in s1:
+                        s1 = s1.split('=')
+                        s1 = s1[1].split('"')
+                        for s1 in s1:
+                            if s1:
+                                if 'post' in s1:
+                                    return 'post'
+                                elif 'get' in s1:
+                                    return 'get'
+                                elif 'POST' in s1:
+                                    return 'POST'
+                                elif 'GET' in s1:
+                                    return 'GET'
+                        
+
+    # /?/
+    def Find_reqajax_parameter(self,url):
+        self.kt_j = []
+        self.zj_j = []
+        self.zj_z = []
+        self.jw_z = []
+        headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
+        headers = {"User-Agent":"Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/65.0"}
+        r = requests.get(url,headers=headers)
+        r = r.content.decode('utf-8')
+        html=etree.HTML(r,etree.HTMLParser())
+        result=html.xpath('//script/text()')
+        for v in result:
+            # print(v)
+            pattern = re.compile(r'data:.*')
+            result1 = pattern.findall(v)
+            # print('-> ',result1)
+            try:
+                result1 = result1.split(',')
+            except:
+                for result1 in result1:
+                    if result1:
+                        # print('1 -> ',result1)
+                        # print('1 -> ',type(result1))
+                        for result1 in result1.split(':'):
+                            if result1:
+                                result1 = result1.split(',')
+                                for result1 in result1:
+                                    if result1:
+                                        # print(result1)
+                                        #Key matching the beginning.
+                                        if '{' in result1:
+                                            if result1:
+                                                result2 = result1.strip()
+                                                #Find {
+                                                f = result2.find('{')
+                                                f1 = result2[f:].strip()
+                                                if '{}' not in f1:
+                                                    f1 = f1.strip('{').strip('"').strip()
+                                                    self.kt_j.append(f1)
+                                                    
+                                    
+                                    #Matching Intermediate key or value.
+                                    if '{' not in result1 and '"' in result1:
+                                        if result1:
+                                            if '"' in result1:
+                                                result2 = result1.strip().strip('"')
+                                                self.zj_j.append(result2)
+
+                                    if '{' not in result1 and '"' not in result1:
+                                        if result1:
+                                            if '}' not in result1:
+                                                result2 = result1.strip()
+                                                self.zj_z.append(result2)
+
+                                    #Match the endpoint value
+                                    if '}' in result1 and '"' not in result1:
+                                        if result1:
+                                            if '{}' not in result1:
+                                                f1 = result1.strip('}').strip()
+                                                self.jw_z.append(f1)
+                                            
+        # print(self.kt_j[0])
+        # # print(zj_z)
+        # print(self.zj_j)
+        # # print(jw_z)
+                                            
+                                        
 
 
-def Judgement_encode():
+
+                                
+
+
+                                
+                                    
+                                        
+
+                  
+                                
+                                
+                                
+
+
+
+                
+
+
+
+
+def Judgement_encode(url):
     """Judgement html doc encode."""
     pass
 
@@ -258,5 +334,13 @@ def Judgement_encode():
 #     if 'POST' in f or 'post' in f or 'GET' in f or 'get' in f:
 #         pass
 
-Find_reqajax_method("https://primarymaths.ephhk.com/pages/contain.php")
+s = Find_Parameter()
+s1 = s.Find_reqajax_parameter("https://primarymaths.ephhk.com/pages/contain.php")
+s2 = s.Find_method("https://primarymaths.ephhk.com/pages/contain.php")
+# print(s1)
+# print(s2)
+
+
+
+
 
