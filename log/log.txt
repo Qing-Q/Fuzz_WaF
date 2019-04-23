@@ -1,0 +1,3 @@
+
+2019-04-23 10:40:53,228  log.py  INFO [line:41] INFO hello word
+2019-04-23 10:40:53,228  log.py  ERROR [line:89] ERROR hello word

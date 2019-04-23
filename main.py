@@ -31,8 +31,12 @@ import requests
 import dis
 import argparse
 import logging
-
+from logging.handlers import RotatingFileHandler
+from colorlog import ColoredFormatter
 from lxml import etree
+from log import Journal
+
+
 
 
 
@@ -267,12 +271,20 @@ class RePLace(Payload1,Payload2,Find_attribute):
         self.url = url
         pass
 
+
     def payload1(self):
         """
         1.注入点测试
         """
         p = self.payloads1
-        return p
+        for p in p:
+            url = self.url+p
+            r = self.req_(url)
+            if "网站防火墙" not in r and "安全狗" not in r:
+                return url
+            else:
+                return url
+        
     
     def payload2(self):
         """
