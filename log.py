@@ -6,9 +6,9 @@ from colorlog import ColoredFormatter
 
 class Journal(object):
 
-    def __init__(self,name,content):
+    def __init__(self,name):
         self.name = name
-        self.content = content
+        # self.content = None
 
     def SAVE_LOG(self):
         fmt = "%(asctime)s  %(filename)s  %(funcName)s [line:%(lineno)d] %(levelname)s %(message)s"
@@ -16,11 +16,11 @@ class Journal(object):
         logging.basicConfig(filename='./log/log.txt', level=logging.DEBUG, format=fmt)
     
     
-    def SAVE_INFO(self):
+    def SAVE_INFO(self,content):
         self.SAVE_LOG()
-        logging.info(self.content)
+        logging.info(content)
 
-    def INFO(self):
+    def INFO(self,content):
         """
         s = Journal('Fuzz_WaF','hello word')
         s.INFO()
@@ -44,13 +44,13 @@ class Journal(object):
         hd_1 = logging.StreamHandler()
         hd_1.setFormatter(formatter)
         logger.addHandler(hd_1)
-        logger.info(self.content)
+        logger.info(content)
 
-    def SAVE_WARNING(self):
+    def SAVE_WARNING(self,content):
         self.SAVE_LOG()
-        logging.warning(self.content)
+        logging.warning(content)
 
-    def WARNING(self):
+    def WARNING(self,content):
         fmt = "%(asctime)s  %(filename)s  %(funcName)s [line:%(lineno)d] %(levelname)s %(message)s"
         logging.basicConfig(filename='./log/log.txt', level=logging.WARNING, format=fmt)
         logger = logging.getLogger(self.name)
@@ -68,13 +68,13 @@ class Journal(object):
         hd_1 = logging.StreamHandler()
         hd_1.setFormatter(formatter)
         logger.addHandler(hd_1)
-        logger.warning(self.content)
+        logger.warning(content)
 
-    def SAVE_ERROR(self):
+    def SAVE_ERROR(self,content):
         self.SAVE_LOG()
-        logging.error(self.content)
+        logging.error(content)
 
-    def ERROR(self):
+    def ERROR(self,content):
         fmt = "%(asctime)s  %(filename)s  %(funcName)s [line:%(lineno)d] %(levelname)s %(message)s"
         logging.basicConfig(filename='./log/log.txt', level=logging.ERROR, format=fmt)
         logger = logging.getLogger(self.name)
@@ -92,13 +92,13 @@ class Journal(object):
         hd_1 = logging.StreamHandler()
         hd_1.setFormatter(formatter)
         logger.addHandler(hd_1)
-        logger.error(self.content)
+        logger.error(content)
 
-    def SAVE_CRITICAL(self):
+    def SAVE_CRITICAL(self,content):
         self.SAVE_LOG()
-        logging.critical(self.content)
+        logging.critical(content)
 
-    def CRITICAL(self):
+    def CRITICAL(self,content):
         fmt = "%(asctime)s  %(filename)s  %(funcName)s [line:%(lineno)d] %(levelname)s %(message)s"
         logging.basicConfig(filename='./log/log.txt', level=logging.CRITICAL, format=fmt)
         logger = logging.getLogger(self.name)
@@ -116,13 +116,13 @@ class Journal(object):
         hd_1 = logging.StreamHandler()
         hd_1.setFormatter(formatter)
         logger.addHandler(hd_1)
-        logger.critical(self.content)
+        logger.critical(content)
 
-    def SAVE_DEBUG(self):
+    def SAVE_DEBUG(self,content):
         self.SAVE_LOG()
-        logging.debug(self.content)
+        logging.debug(content)
 
-    def DEBUG(self):
+    def DEBUG(self,content):
         fmt = "%(asctime)s  %(filename)s  %(funcName)s [line:%(lineno)d] %(levelname)s %(message)s"
         logging.basicConfig(filename='./log/log.txt', level=logging.DEBUG, format=fmt)
         logger = logging.getLogger(self.name)
@@ -140,7 +140,7 @@ class Journal(object):
         hd_1 = logging.StreamHandler()
         hd_1.setFormatter(formatter)
         logger.addHandler(hd_1)
-        logger.debug(self.content)
+        logger.debug(content)
 
     
 
