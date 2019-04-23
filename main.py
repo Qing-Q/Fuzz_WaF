@@ -207,7 +207,8 @@ class Find_attribute(object):
 
 
 
-
+class Test(object):
+    t = ['\'','<script>','%27']
 
 class Payload1(object):
     #attribute
@@ -264,7 +265,8 @@ class Payload2(object):
 class RePLace(Payload1,
               Payload2,
               Find_attribute,
-              Journal):
+              Journal,
+              Test):
     '''针对4.0 payload替换.'''
 
     def __init__(self,url,name):
@@ -275,27 +277,57 @@ class RePLace(Payload1,
         self.name = None
         
     def new_url(self):
-        pars = []
-        url = self.url
-        url = url.split('?')
-        self.url = url[0]+'?'
-        par = url[1]
-        par = par.split('&')
-        for par in par:
-            par = par.split('=')
-            par = par[0]+'='
-            pars.append(par)
-        
-        return pars
-        
+        try:
+            pars = []
+            url = self.url
+            url = url.split('?')
+            self.url = url[0]+'?'
+            par = url[1]
+            par = par.split('&')
+            for par in par:
+                par = par.split('=')
+                par = par[0]+'='
+                pars.append(par)
+            
+            return pars
+        except:
+            pass
+            # pars = []
+            # url = self.url
+            # url = url.split('?')
+            # self.url = url[0]+'?'
+            # par = url[1]
+            # par = par.split('&')
+            # for par in par:
+            #     par = par.split('=')
+            #     par = par[0]+'='
+            #     pars.append(par)
+            
+            # return pars
+            
         # pattern = re.compile(r'')
         # result1 = pattern.findall(v)
 
     def collect_waf_page(self):
         """
-        查找存在安全狗的站点
+        查找存在安全狗的站点(GET)
         """
-        pass
+        try:
+            p = self.t
+            pars = self.new_url()
+            for p in p:
+                for pars in pars:
+                    url = self.url+pars+p
+                    print('当前payloads -> ',url)
+                    r = self.req_(url)
+                    if "网站防火墙" in r or "安全狗" in r:
+                        self.INFO('存在安全狗的站点,成功的payload -> {}'.format(url))
+                        return url
+                    else:
+                        self.ERROR('不存在安全狗的站点,失败的payload -> {}'.format(url))
+                        
+        except:
+            pass
 
     def payload1(self):
         """
@@ -370,9 +402,9 @@ class RePLace(Payload1,
 
             
 
-    def replace(self):
-        #Make payload
-        pass
+    # def replace(self):
+    #     #Make payload
+    #     pass
 
 
 
@@ -579,14 +611,18 @@ if __name__ == "__main__":
     # # s = test('https://www.aynax.com/login.php')
     # s.test()
 
-s = RePLace('https://www.baidu.com/index.php?id=1&xde=2','Fuzz_WaF')
 
-s.payload1()
-    
-  
+def run():
+    args = mian()
+    with open(args.multiple,'r') as f:
+        for url in f.readlines():
+            print('url -> ',url)
+            s = RePLace(url,'Fuzz_WaF')
+            s.collect_waf_page()
+        
 
 
-
+run()
 
 
 
