@@ -291,19 +291,10 @@ class RePLace(Payload1,
             
             return pars
         except:
-            pass
-            # pars = []
-            # url = self.url
-            # url = url.split('?')
-            # self.url = url[0]+'?'
-            # par = url[1]
-            # par = par.split('&')
-            # for par in par:
-            #     par = par.split('=')
-            #     par = par[0]+'='
-            #     pars.append(par)
-            
-            # return pars
+            pars = []
+            url = self.url
+            if '?' not in url:
+                pass
             
         # pattern = re.compile(r'')
         # result1 = pattern.findall(v)
