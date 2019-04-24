@@ -56,6 +56,7 @@ def mian():
     parser.add_argument('--data','-d',help="Post data.")
     parser.add_argument('--url','-u',help="Scan url.")
     parser.add_argument('--multiple','-m',help="Batch Scanning.")
+    parser.add_argument('--Error','-e',action='store_true',help='View error info.')
     args = parser.parse_args()
     return args
 
@@ -274,27 +275,48 @@ class RePLace(Payload1,
         # print(self.a)
         self.payloads = []
         self.url = url
-        self.name = None
+        self.name = ''
         
-    def new_url(self):
-        try:
-            pars = []
-            url = self.url
-            url = url.split('?')
-            self.url = url[0]+'?'
-            par = url[1]
-            par = par.split('&')
-            for par in par:
-                par = par.split('=')
-                par = par[0]+'='
-                pars.append(par)
-            
-            return pars
-        except:
-            pars = []
-            url = self.url
-            if '?' not in url:
-                pass
+
+    def new_url1(self,url,pd=''):
+        if '?' in url:
+            if 'True' in pd:
+                urls = url.split('?')
+                url = urls[0]+'?'
+                par = urls[1].split('=')
+                pars = par[0]+'='
+                return (url,pars)
+            else:
+                urls = url.split('?')
+                urls = urls[0]
+                return urls
+        else:
+            self.ERROR('失效的地址 -> {}'.format(url))
+
+
+
+    def new_url2(self,url,pd=''):
+        if '?' in url:
+            url1 = []
+            par1 = []
+            if 'True' in pd:
+                urls = url.split('?')
+                url = urls[0]+'?'
+                url1.append(url)
+                url = urls[1].split('&')
+                for pars in url:
+                    pars = pars.split('=')
+                    pars = pars[0]+'='
+                    par1.append(pars)
+                return (url1,par1)
+            else:
+                urls = url.split('?')
+                url = urls[0]
+                url1.append(url)
+                return url1
+        else:
+            self.ERROR('失效的地址 -> {}'.format(url))
+                    
             
         # pattern = re.compile(r'')
         # result1 = pattern.findall(v)
@@ -304,92 +326,113 @@ class RePLace(Payload1,
         查找存在安全狗的站点(GET)
         """
         try:
-            p = self.t
-            pars = self.new_url()
-            for p in p:
-                for pars in pars:
-                    url = self.url+pars+p
-                    print('当前payloads -> ',url)
-                    r = self.req_(url)
-                    if "网站防火墙" in r or "安全狗" in r:
-                        self.INFO('存在安全狗的站点,成功的payload -> {}'.format(url))
-                        return url
-                    else:
-                        self.ERROR('不存在安全狗的站点,失败的payload -> {}'.format(url))
-                        
-        except:
-            pass
-
-    def payload1(self):
-        """
-        1.注入点测试(GET)
-        """
-        p = self.payloads1
-        pars = self.new_url()
-        for p in p:
-            for pars in pars:
-                url = self.url+pars+p
-                r = self.req_(url)
-                if "网站防火墙" not in r and "安全狗" not in r:
-                    self.INFO('发现注入点.')
-                    return url
+            i = 0
+            u1 = self.new_url1(self.url,'True')
+            url1 = u1[0]
+            pars1 = u1[1]
+            payloads = self.t
+            for payloads in payloads:
+                urls = url1 + pars1 + payloads
+                r = self.req_(urls)
+                if '安全狗' in r or '网站防火墙' in r:
+                    return (r,urls)
                 else:
-                    self.ERROR('不存在注入点.')
-                    return False
+                    return None
+        except:
+            try:
+                i = 0
+                u1 = self.new_url2(self.url,'True')
+                url1 = u1[0]
+                pars1 = u1[1]
+                payloads = self.t
+                for payloads in payloads:
+                    for pars in pars1:
+                        urls = url1 + pars + payloads
+                        r = self.req_(urls)
+                        if '安全狗' in r or '网站防火墙' in r:
+                            return (r,urls)
+                        else:
+                            return None    
+            except:
+                return False
+                    
+
+
+                    
+
+                        
+
+
+    # def payload1(self):
+    #     """
+    #     1.注入点测试(GET)
+    #     """
+    #     p = self.payloads1
+    #     pars = self.new_url()
+    #     for p in p:
+    #         for pars in pars:
+    #             url = self.url+pars+p
+    #             r = self.req_(url)
+    #             if "网站防火墙" not in r and "安全狗" not in r:
+    #                 self.INFO('发现注入点.')
+    #                 return url
+    #             else:
+    #                 self.ERROR('不存在注入点.')
+    #                 return False
         
     
-    def payload2(self):
-        """
-        2.判断数据库长度(GET)
-        """
-        l = 0
-        while True:
-            p = self.payloads3.format(str(l))
-            url = self.url+p
-            r = self.req_(url)
-            if "网站防火墙" not in r and "安全狗" not in r:
-                return r
-            else:
-                return False
-            l += 1
+    # def payload2(self):
+    #     """
+    #     2.判断数据库长度(GET)
+    #     """
+    #     l = 0
+    #     while True:
+    #         p = self.payloads3.format(str(l))
+    #         url = self.url+p
+    #         r = self.req_(url)
+    #         if "网站防火墙" not in r and "安全狗" not in r:
+    #             return r
+    #         else:
+    #             return False
+    #         l += 1
 
-    def payload2_(self):
-        """
-        2.判断数据库长度(GET)
-        """
-        l = 0
-        while True:
-            p = self.payloads4.format(str(l))
-            url = self.url+p
-            r = self.req_(url)
-            if "网站防火墙" not in r and "安全狗" not in r:
-                return r
-            else:
-                return False
+    # def payload2_(self):
+    #     """
+    #     2.判断数据库长度(GET)
+    #     """
+    #     l = 0
+    #     while True:
+    #         p = self.payloads4.format(str(l))
+    #         url = self.url+p
+    #         r = self.req_(url)
+    #         if "网站防火墙" not in r and "安全狗" not in r:
+    #             return r
+    #         else:
+    #             return False
             
-            l += 1
+    #         l += 1
 
-    def payload2__(self):
-        """
-        2.判断数据库长度(GET)
-        """
-        l = 0
-        while True:
-            p = self.payloads5.format(str(l),str(l))
-            url = self.url+p
-            r = self.req_(url)
-            if "网站防火墙" not in r and "安全狗" not in r:
-                return r
-            else:
-                return False
+    # def payload2__(self):
+    #     """
+    #     2.判断数据库长度(GET)
+    #     """
+    #     l = 0
+    #     while True:
+    #         p = self.payloads5.format(str(l),str(l))
+    #         url = self.url+p
+    #         r = self.req_(url)
+    #         if "网站防火墙" not in r and "安全狗" not in r:
+    #             return r
+    #         else:
+    #             return False
             
-            l += 1
+    #         l += 1
     
-    def payload3(self):
-        """
-        3.获取数据库名(GET)
-        """
-        pass
+    # def payload3(self):
+    #     """
+    #     3.获取数据库名(GET)
+    #     """
+    #     pass
 
             
 
@@ -606,21 +649,55 @@ if __name__ == "__main__":
 def run():
     args = mian()
     with open(args.multiple,'r') as f:
+        ii = 0
         for url in f.readlines():
-            print('url -> ',url)
             s = RePLace(url,'Fuzz_WaF')
-            s.collect_waf_page()
-        
+            a = s.collect_waf_page(args.Error,ii=ii)
+            if not a:
+                s.collect_waf_page(args.Error,ii=ii)
+            ii += 1
+            
 
 
 run()
 
+# url1 = "https://www.baidu.com/index.php?id=1&ad=1&bd=1"
+
+# url2 = "https://www.baidu.com/index.php?id=1"
+
+
+# def new_url1(url,pd=''):
+#     if '?' in pd:
+#         urls = url.split('?')
+#         url = urls[0]+'?'
+#         par = urls[1].split('=')
+#         pars = par[0]+'='
+#         return (url,pars)
+#     else:
+#         urls = url.split('?')
+#         urls = urls[0]
+#         return urls
 
 
 
-
-
-
+# def new_url2(url,pd=''):
+#     url1 = []
+#     par1 = []
+#     if '?' in pd:
+#         urls = url.split('?')
+#         url = urls[0]+'?'
+#         url1.append(url)
+#         url = urls[1].split('&')
+#         for pars in url:
+#             pars = pars.split('=')
+#             pars = pars[0]+'='
+#             par1.append(pars)
+#         return (url1,par1)
+#     else:
+#         urls = url.split('?')
+#         url = urls[0]
+#         url1.append(url)
+#         return url1
 
 
 
