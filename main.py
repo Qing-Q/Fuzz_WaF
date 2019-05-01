@@ -330,11 +330,13 @@ class RePLace(Payload1,
             payloads = self.t
             for payloads in payloads:
                 urls = url1 + pars1 + payloads
+                if urls:
+                    print('[*]payloads1 -> '+urls)
                 r = self.req_(urls)
                 if '安全狗' in r or '网站防火墙' in r:
                     return (r,urls)
-                else:
-                    return False
+                    
+            return False
         except:
             try:
                 u1 = self.new_url2(self.url,'True')
@@ -344,11 +346,13 @@ class RePLace(Payload1,
                 for payloads in payloads:
                     for pars in pars1:
                         urls = url1 + pars + payloads
+                        if urls:
+                            print('[*]payloads2 -> '+urls)
                         r = self.req_(urls)
                         if '安全狗' in r or '网站防火墙' in r:
                             return (r,urls)
-                        else:
-                            return False    
+                
+                return False    
             except:
                 return False
                     
