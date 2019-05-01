@@ -81,7 +81,10 @@ class Find_attribute(object):
         headers = get_headers()
         r = requests.get(self.url,headers=headers)
         encodes = self.Find_encodes()
-        r = r.content.decode(encodes)
+        try:
+            r = r.content.decode(encodes)
+        except Exception as e:
+            r = r.text
         # r = r.split('>')
         return r
 
@@ -90,7 +93,10 @@ class Find_attribute(object):
         headers = get_headers()
         r = requests.get(url,headers=headers)
         encodes = self.Find_encodes()
-        r = r.content.decode(encodes)
+        try:
+            r = r.content.decode(encodes)
+        except Exception as e:
+            r = r.text
         return r
 
 
