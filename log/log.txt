@@ -2594,3 +2594,123 @@
 
 2019-04-24 21:24:15,436  log.py  ERROR [line:95] ERROR 失效的地址 -> http://www.tom61.com/youshengduwu/huashuozhongguopingshu/2010-08-22/13103.html
 
+2019-05-01 17:00:37,863  log.py  ERROR [line:96] ERROR 失效的地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:00:37,863  log.py  ERROR [line:96] ERROR 失效的地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:00:37,863  log.py  ERROR [line:96] ERROR 失效的地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:00:37,863  log.py  ERROR [line:96] ERROR 失效的地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:00:37,863  log.py  ERROR [line:96] ERROR 失效的地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:00:37,864  log.py  ERROR [line:96] ERROR 失效的地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:00:37,864  log.py  ERROR [line:96] ERROR 失效的地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:00:37,864  log.py  ERROR [line:96] ERROR 失效的地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:00:46,558  log.py  ERROR [line:96] ERROR 失效的地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+
+2019-05-01 17:00:46,559  log.py  ERROR [line:96] ERROR 失效的地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+
+2019-05-01 17:00:46,559  log.py  ERROR [line:96] ERROR 失效的地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+
+2019-05-01 17:00:46,560  log.py  ERROR [line:96] ERROR 失效的地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+
+2019-05-01 17:00:46,810  log.py  ERROR [line:96] ERROR 失效的地址 -> http://www.edugeek.net/forums/windows/62539-owa-multiple-logon-request.html
+
+2019-05-01 17:00:46,810  log.py  ERROR [line:96] ERROR 失效的地址 -> http://www.edugeek.net/forums/windows/62539-owa-multiple-logon-request.html
+
+2019-05-01 17:00:46,811  log.py  ERROR [line:96] ERROR 失效的地址 -> http://www.edugeek.net/forums/windows/62539-owa-multiple-logon-request.html
+
+2019-05-01 17:00:46,812  log.py  ERROR [line:96] ERROR 失效的地址 -> http://www.edugeek.net/forums/windows/62539-owa-multiple-logon-request.html
+
+2019-05-01 17:00:52,929  log.py  ERROR [line:96] ERROR 失效的地址 -> http://mail.siasun.com/owa/auth/logon.aspx
+
+2019-05-01 17:00:52,930  log.py  ERROR [line:96] ERROR 失效的地址 -> http://mail.siasun.com/owa/auth/logon.aspx
+
+2019-05-01 17:00:52,931  log.py  ERROR [line:96] ERROR 失效的地址 -> http://mail.siasun.com/owa/auth/logon.aspx
+
+2019-05-01 17:00:52,931  log.py  ERROR [line:96] ERROR 失效的地址 -> http://mail.siasun.com/owa/auth/logon.aspx
+
+2019-05-01 17:00:57,453  log.py  ERROR [line:96] ERROR 失效的地址 -> https://forums.techguy.org/threads/domain-name-in-owa-2000-logon.217791/
+
+2019-05-01 17:00:57,455  log.py  ERROR [line:96] ERROR 失效的地址 -> https://forums.techguy.org/threads/domain-name-in-owa-2000-logon.217791/
+
+2019-05-01 17:00:57,456  log.py  ERROR [line:96] ERROR 失效的地址 -> https://forums.techguy.org/threads/domain-name-in-owa-2000-logon.217791/
+
+2019-05-01 17:00:57,457  log.py  ERROR [line:96] ERROR 失效的地址 -> https://forums.techguy.org/threads/domain-name-in-owa-2000-logon.217791/
+
+2019-05-01 17:04:19,282  log.py  ERROR [line:96] ERROR 失效的地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:04:19,282  log.py  ERROR [line:96] ERROR 失效的地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:04:19,282  log.py  ERROR [line:96] ERROR 失效地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:04:19,283  log.py  ERROR [line:96] ERROR 失效的地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:04:19,283  log.py  ERROR [line:96] ERROR 失效的地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:04:19,283  log.py  ERROR [line:96] ERROR 失效地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:04:21,326  log.py  ERROR [line:96] ERROR 失效地址 -> https://exchange.s.thehostingplatform.com/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fexchange.s.thehostingplatform.com%2fowa%2f
+
+2019-05-01 17:04:22,436  log.py  ERROR [line:96] ERROR 失效地址 -> https://staff.warrenking.com.au/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fstaff.warrenking.com.au%2fowa%2f
+
+2019-05-01 17:04:22,436  log.py  ERROR [line:96] ERROR 失效的地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+
+2019-05-01 17:04:22,436  log.py  ERROR [line:96] ERROR 失效的地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+
+2019-05-01 17:04:22,437  log.py  ERROR [line:96] ERROR 失效地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+
+2019-05-01 17:04:22,559  log.py  ERROR [line:96] ERROR 失效地址 -> http://mail.centaline.com.cn/owa/auth/logon.aspx?replaceCurrent=1&reason=2&url=http%3a%2f%2fmail.centaline.com.cn%2fowa%2f
+
+2019-05-01 17:04:22,560  log.py  ERROR [line:96] ERROR 失效的地址 -> http://www.edugeek.net/forums/windows/62539-owa-multiple-logon-request.html
+
+2019-05-01 17:04:22,560  log.py  ERROR [line:96] ERROR 失效的地址 -> http://www.edugeek.net/forums/windows/62539-owa-multiple-logon-request.html
+
+2019-05-01 17:04:22,560  log.py  ERROR [line:96] ERROR 失效地址 -> http://www.edugeek.net/forums/windows/62539-owa-multiple-logon-request.html
+
+2019-05-01 17:04:25,521  log.py  ERROR [line:96] ERROR 失效地址 -> https://mail.neonet.org:443/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmail.neonet.org%2fowa%2f
+
+2019-05-01 17:04:25,522  log.py  ERROR [line:96] ERROR 失效的地址 -> http://mail.siasun.com/owa/auth/logon.aspx
+
+2019-05-01 17:04:25,523  log.py  ERROR [line:96] ERROR 失效的地址 -> http://mail.siasun.com/owa/auth/logon.aspx
+
+2019-05-01 17:04:25,523  log.py  ERROR [line:96] ERROR 失效地址 -> http://mail.siasun.com/owa/auth/logon.aspx
+
+2019-05-01 17:05:31,499  log.py  ERROR [line:96] ERROR 失效地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:05:31,499  log.py  ERROR [line:96] ERROR 失效地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:05:33,564  log.py  ERROR [line:96] ERROR 失效地址 -> https://exchange.s.thehostingplatform.com/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fexchange.s.thehostingplatform.com%2fowa%2f
+
+2019-05-01 17:05:34,702  log.py  ERROR [line:96] ERROR 失效地址 -> https://staff.warrenking.com.au/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fstaff.warrenking.com.au%2fowa%2f
+
+2019-05-01 17:05:34,702  log.py  ERROR [line:96] ERROR 失效地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+
+2019-05-01 17:05:34,829  log.py  ERROR [line:96] ERROR 失效地址 -> http://mail.centaline.com.cn/owa/auth/logon.aspx?replaceCurrent=1&reason=2&url=http%3a%2f%2fmail.centaline.com.cn%2fowa%2f
+
+2019-05-01 17:05:34,830  log.py  ERROR [line:96] ERROR 失效地址 -> http://www.edugeek.net/forums/windows/62539-owa-multiple-logon-request.html
+
+2019-05-01 17:05:38,210  log.py  ERROR [line:96] ERROR 失效地址 -> https://mail.neonet.org:443/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fmail.neonet.org%2fowa%2f
+
+2019-05-01 17:05:38,210  log.py  ERROR [line:96] ERROR 失效地址 -> http://mail.siasun.com/owa/auth/logon.aspx
+
+2019-05-01 17:05:40,520  log.py  ERROR [line:96] ERROR 失效地址 -> http://mail.songjiang.gov.cn/owa/auth/logon.aspx?replaceCurrent=1&reason=2&url=http%3a%2f%2fmail.songjiang.gov.cn%2fowa%2f
+
+2019-05-01 17:05:40,521  log.py  ERROR [line:96] ERROR 失效地址 -> https://forums.techguy.org/threads/domain-name-in-owa-2000-logon.217791/
+
+2019-05-01 17:06:02,646  log.py  ERROR [line:96] ERROR 失效地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:06:10,517  log.py  ERROR [line:96] ERROR 失效地址 -> http://en.findeen.com/email_coca_cola_owa_auth_logon_aspx.html
+
+2019-05-01 17:06:10,518  log.py  ERROR [line:96] ERROR 失效地址 -> https://mail2.boostjuice.com.au/owa/auth/logon.aspx
+
+2019-05-01 17:06:12,556  log.py  ERROR [line:96] ERROR 失效地址 -> https://exchange.s.thehostingplatform.com/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fexchange.s.thehostingplatform.com%2fowa%2f
+
+2019-05-01 17:06:13,697  log.py  ERROR [line:96] ERROR 失效地址 -> https://staff.warrenking.com.au/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fstaff.warrenking.com.au%2fowa%2f
+
+2019-05-01 17:06:13,698  log.py  ERROR [line:96] ERROR 失效地址 -> http://exchange.nus.edu.sg/owa/auth/logoff.aspx
+

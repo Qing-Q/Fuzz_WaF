@@ -291,8 +291,7 @@ class RePLace(Payload1,
                 urls = urls[0]
                 return urls
         else:
-            self.ERROR('失效的地址 -> {}'.format(url))
-
+            pass
 
 
     def new_url2(self,url,pd=''):
@@ -315,8 +314,7 @@ class RePLace(Payload1,
                 url1.append(url)
                 return url1
         else:
-            self.ERROR('失效的地址 -> {}'.format(url))
-                    
+            pass     
             
         # pattern = re.compile(r'')
         # result1 = pattern.findall(v)
@@ -326,7 +324,6 @@ class RePLace(Payload1,
         查找存在安全狗的站点(GET)
         """
         try:
-            i = 0
             u1 = self.new_url1(self.url,'True')
             url1 = u1[0]
             pars1 = u1[1]
@@ -337,10 +334,9 @@ class RePLace(Payload1,
                 if '安全狗' in r or '网站防火墙' in r:
                     return (r,urls)
                 else:
-                    return None
+                    return False
         except:
             try:
-                i = 0
                 u1 = self.new_url2(self.url,'True')
                 url1 = u1[0]
                 pars1 = u1[1]
@@ -352,7 +348,7 @@ class RePLace(Payload1,
                         if '安全狗' in r or '网站防火墙' in r:
                             return (r,urls)
                         else:
-                            return None    
+                            return False    
             except:
                 return False
                     
@@ -649,14 +645,16 @@ if __name__ == "__main__":
 def run():
     args = mian()
     with open(args.multiple,'r') as f:
-        ii = 0
         for url in f.readlines():
             s = RePLace(url,'Fuzz_WaF')
-            a = s.collect_waf_page(args.Error,ii=ii)
+            a = s.collect_waf_page()
             if not a:
-                s.collect_waf_page(args.Error,ii=ii)
-            ii += 1
-            
+                print('[-]失效地址 -> '+url)
+            else:
+                print('[+]成功地址 -> '+url)
+                
+                
+
 
 
 run()

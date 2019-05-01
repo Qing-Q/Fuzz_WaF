@@ -1,3 +1,4 @@
+#coding:utf-8
 import logging
 import colorlog
 from logging.handlers import RotatingFileHandler
