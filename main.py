@@ -432,7 +432,7 @@ class RePLace(Payload1,
             payloads = self.payloads3
             i = 0
             while True:
-                urls = url1 + pars1 + payloads.format(i)
+                urls = url1 + pars1 +"{}".format(i) + payloads.format(i)
                 if urls:
                     print('[*]payloads5 -> '+urls)
                 r = self.req_(urls)
