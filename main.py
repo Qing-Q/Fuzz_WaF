@@ -19,6 +19,10 @@ logo = """
 |  _|| |_| |/ / / /    \ V  V / (_| |  _|  
 |_|   \__,_/___/___|    \_/\_/ \__,_|_|   
 
+##########################################
+
+@Author:Remix
+@Data:2019-4-25
 """
 
 logo = '\033[1;33m' +'{}'.format(logo)+ '\033[0m'
@@ -292,8 +296,9 @@ class RePLace(Payload1,
                 urls = url.split('?')
                 url = urls[0]+'?'
                 par = urls[1].split('=')
+                value = par[1] 
                 pars = par[0]+'='
-                return (url,pars)
+                return (url,pars,value)
             else:
                 urls = url.split('?')
                 urls = urls[0]
@@ -306,6 +311,7 @@ class RePLace(Payload1,
         if '?' in url:
             url1 = []
             par1 = []
+            value1 = []
             if 'True' in pd:
                 urls = url.split('?')
                 url = urls[0]+'?'
@@ -314,8 +320,10 @@ class RePLace(Payload1,
                 for pars in url:
                     pars = pars.split('=')
                     pars = pars[0]+'='
+                    value = pars[1]
                     par1.append(pars)
-                return (url1,par1)
+                    value1.append(value)
+                return (url1,par1,value1)
             else:
                 urls = url.split('?')
                 url = urls[0]
@@ -331,13 +339,26 @@ class RePLace(Payload1,
         u1 = self.nurl1(url,'True')
         url1 = u1[0]
         pars1 = u1[1]
-        return (url1,pars1)
+        value1 = u1[2]
+        return (url1,pars1,value1)
 
     def nurl__(self,url):
+        url1 = []
+        pars1 = []
+        value1 = []        
+
         u1 = self.nurl2(url,'True')
-        url1 = u1[0]
-        pars1 = u1[1]
-        return (url1,pars1)
+        
+        for url in u1[0]:
+            url1.append(url)
+
+        for pars in u1[1]:
+            pars1.append(pars)
+
+        for value in u1[2]:
+            value1.append(value)
+
+        return (url1,pars1,value1)
 
 
     def collect_waf_page(self):
@@ -359,15 +380,16 @@ class RePLace(Payload1,
                     
             return False
         except Exception as e:
-            print('Error1 -> ',traceback.format_exc())
+            # print('Error1 -> ',traceback.format_exc())
             try:
                 u1 = self.nurl__(self.url)
-                url1 = u1[0]
-                pars1 = u1[1]
+                url = u1[0]
+                pars = u1[1]
+                # value = u1[2]
                 payloads = self.t
                 for payloads in payloads:
-                    for pars in pars1:
-                        urls = url1 + pars + payloads
+                    for url1,pars1 in zip(url,pars):
+                        urls = url1 + pars1 + payloads
                         if urls:
                             print('[*]payloads2 -> '+urls)
                         r = self.req_(urls)
@@ -376,7 +398,7 @@ class RePLace(Payload1,
                 
                 return False    
             except Exception as e:
-                print('Error2 -> ',traceback.format_exc())
+                # print('Error2 -> ',traceback.format_exc())
                 return False
                     
 
@@ -403,12 +425,12 @@ class RePLace(Payload1,
         except:
             try:
                 u1 = self.nurl__(url)
-                url1 = u1[0]
-                pars1 = u1[1]
+                url = u1[0]
+                pars = u1[1]
                 payloads = self.payloads1
                 for payloads in payloads:
-                    for pars in pars1:
-                        urls = url1 + pars + payloads
+                    for url1,pars1 in zip(url,pars):
+                        urls = url1 + pars1 + payloads
                         if urls:
                             print('[*]payloads4 -> '+urls)
                         r = self.req_(urls)
@@ -429,13 +451,15 @@ class RePLace(Payload1,
             u1 = self.nurl_(url)
             url1 = u1[0]
             pars1 = u1[1]
+            value1 = u1[2]
             payloads = self.payloads3
             i = 0
             while True:
                 #/?/
-                urls = url1 + pars1 +"{}".format(i) + payloads.format(i)
+                urls = url1 + pars1 + '{}'.format(value1) + payloads.format(i)
                 if urls:
                     print('[*]payloads5 -> '+urls)
+                    self.SAVE_INFO(urls)
                 r = self.req_(urls)
                 if '安全狗' not in r and '网站防火墙' not in r:
                     result.append(r)
@@ -449,13 +473,14 @@ class RePLace(Payload1,
             try:
                 result = []
                 u1 = self.nurl__(url)
-                url1 = u1[0]
-                pars1 = u1[1]
+                url = u1[0]
+                pars = u1[1]
+                value = u1[2]
                 payloads = self.payloads3
                 i = 0
                 while True:    
-                    for pars in pars1:
-                        urls = url1 + pars + payloads.format(i)
+                    for url1,pars1,value1 in zip(url,pars,value):
+                        urls = url1 + pars1 + '{}'.format(value1) + payloads.format(i)
                         if urls:
                             print('[*]payloads6 -> '+urls)
                         r = self.req_(urls)
