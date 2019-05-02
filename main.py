@@ -457,7 +457,6 @@ class RePLace(Payload1,
                 urls = url1 + pars1 + '{}'.format(value1).strip() + payloads.format(i)
                 if urls:
                     print('[*]payloads5 -> '+urls)
-                    self.SAVE_INFO(urls)
                 r = self.req_(urls)
                 if '安全狗' not in r and '网站防火墙' not in r:
                     if r:
