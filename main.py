@@ -550,35 +550,14 @@ class RePLace(Payload1,
                 return False
 
 
-
-
-    # def payload2__(self):
-    #     """
-    #     2.判断数据库长度(GET)
-    #     """
-    #     l = 0
-    #     while True:
-    #         p = self.payloads5.format(str(l),str(l))
-    #         url = self.url+p
-    #         r = self.req_(url)
-    #         if "网站防火墙" not in r and "安全狗" not in r:
-    #             return r
-    #         else:
-    #             return False
-            
-    #         l += 1
     
-    # def payload3(self):
-    #     """
-    #     3.获取数据库名(GET)
-    #     """
-    #     pass
+    def Get_the_database_name(self,url):
+        """
+        3.获取数据库名(GET)
+        """
+        pass
 
             
-
-    # def replace(self):
-    #     #Make payload
-    #     pass
 
 
 
