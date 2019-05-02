@@ -461,7 +461,7 @@ class RePLace(Payload1,
                 r = self.req_(urls)
                 if '安全狗' not in r and '网站防火墙' not in r:
                     if r:
-                        #判断如果长度为0且返回正常页面则不存在注入点.
+                        #判断如果长度为0且返回正常页面则payload失效.
                         if i == 0:
                             if r:
                                 return False
@@ -485,7 +485,7 @@ class RePLace(Payload1,
                         r = self.req_(urls)
                         if '安全狗' not in r and '网站防火墙' not in r:
                             if r:
-                                #判断如果长度为0且返回正常页面则不存在注入点.
+                                #判断如果长度为0且返回正常页面则payload失效.
                                 if i == 0:
                                     if r:
                                         return False
