@@ -288,6 +288,7 @@ class RePLace(Payload1,
         self.payloads = []
         self.url = url
         self.name = ''
+        self.ekd = ['Error','error','']
         
 
     def nurl1(self,url,pd=''):
@@ -414,7 +415,7 @@ class RePLace(Payload1,
             pars1 = u1[1]
             payloads = self.payloads1
             for payloads in payloads:
-                urls = url1 + pars1 + payloads
+                urls = url1 + pars1 + payloads.strip()
                 if urls:
                     print('[*]payloads3 -> '+urls)
                 r = self.req_(urls)
@@ -430,7 +431,7 @@ class RePLace(Payload1,
                 payloads = self.payloads1
                 for payloads in payloads:
                     for url1,pars1 in zip(url,pars):
-                        urls = url1 + pars1 + payloads
+                        urls = url1 + pars1 + payloads.strip()
                         if urls:
                             print('[*]payloads4 -> '+urls)
                         r = self.req_(urls)
@@ -460,12 +461,15 @@ class RePLace(Payload1,
                 r = self.req_(urls)
                 if '安全狗' not in r and '网站防火墙' not in r:
                     if r:
+                        #判断如果长度为0且返回正常页面则不存在注入点.
+                        if i == 0:
+                            if r:
+                                return False
                         return r
-                
                 i += 1
             return False
         except Exception as e:
-            print('Error1 -> ',traceback.format_exc())
+            # print('Error1 -> ',traceback.format_exc())
             try:
                 u1 = self.nurl__(url)
                 url = u1[0]
@@ -481,12 +485,15 @@ class RePLace(Payload1,
                         r = self.req_(urls)
                         if '安全狗' not in r and '网站防火墙' not in r:
                             if r:
+                                #判断如果长度为0且返回正常页面则不存在注入点.
+                                if i == 0:
+                                    if r:
+                                        return False
                                 return r
                     i += 1
-                    
                 return False    
             except Exception as e:
-                print('Error2 -> ',traceback.format_exc())
+                # print('Error2 -> ',traceback.format_exc())
                 return False
 
     # def payload2_(self):
