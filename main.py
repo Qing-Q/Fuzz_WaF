@@ -37,10 +37,10 @@ import argparse
 import time
 import traceback
 import logging
-from logging.handlers import RotatingFileHandler
-from colorlog import ColoredFormatter
 from lxml import etree
 from log import Journal
+# from logging.handlers import RotatingFileHandler
+# from colorlog import ColoredFormatter
 
 
 
